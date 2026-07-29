@@ -146,7 +146,7 @@ namespace AutoDuty.Windows
                         ImGui.ProgressBar(progress, new Vector2(200, 0));
                     }
                     else
-                        ImGui.Text($"{Plugin.CurrentTerritoryContent.Name} Mesh: Loaded Path: {(ContentPathsManager.DictionaryPaths.ContainsKey(Plugin.CurrentTerritoryContent.TerritoryType) ? "已載入" : "None")}");
+                        ImGui.Text($"{Plugin.CurrentTerritoryContent.Name} 導航網格：路徑狀態：{(ContentPathsManager.DictionaryPaths.ContainsKey(Plugin.CurrentTerritoryContent.TerritoryType) ? "已載入" : "無")}");
 
                     ImGui.Separator();
                     ImGui.Spacing();
@@ -215,14 +215,14 @@ namespace AutoDuty.Windows
 
                             if (Plugin.InDungeon && Plugin.Actions.Count < 1 && !ContentPathsManager.DictionaryPaths.ContainsKey(Plugin.CurrentTerritoryContent.TerritoryType))
                                 ImGui.TextColored(new Vector4(0, 255, 0, 1),
-                                                  $"No Path file was found for:\n{TerritoryName.GetTerritoryName(Plugin.CurrentTerritoryContent.TerritoryType).Split('|')[1].Trim()}\n({Plugin.CurrentTerritoryContent.TerritoryType}.json)\nin the Paths Folder:\n{Plugin.PathsDirectory.FullName.Replace('\\', '/')}\nPlease download from:\n{_pathsURL}\nor Create in the Build Tab");
+                                                  $"找不到以下區域的路徑檔案：\n{TerritoryName.GetTerritoryName(Plugin.CurrentTerritoryContent.TerritoryType).Split('|')[1].Trim()}\n({Plugin.CurrentTerritoryContent.TerritoryType}.json)\n路徑資料夾：\n{Plugin.PathsDirectory.FullName.Replace('\\', '/')}\n請由下列位置下載：\n{_pathsURL}\n或在「建立」頁籤中建立路徑。");
                         }
                         else
                         {
                             if (!VNavmesh_IPCSubscriber.IsEnabled && !Plugin.Configuration.UsingAlternativeMovementPlugin)
-                                ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty Requires VNavmesh plugin to be Installed and Loaded\nPlease add 3rd party repo:\nhttps://puni.sh/api/repository/veyn");
+                                ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty 需要安裝並載入 vnavmesh 才能導航與移動。\n請加入第三方插件庫：\nhttps://puni.sh/api/repository/veyn");
                             if (!BossMod_IPCSubscriber.IsEnabled && !Plugin.Configuration.UsingAlternativeBossPlugin)
-                                ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty Requires BossMod plugin to be Installed and Loaded\nPlease add 3rd party repo:\nhttps://puni.sh/api/repository/veyn");
+                                ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty 需要安裝並載入 BossMod 才能處理副本機制。\n請加入第三方插件庫：\nhttps://puni.sh/api/repository/veyn");
                             if (!Wrath_IPCSubscriber.IsEnabled && !RSR_IPCSubscriber.IsEnabled && !BossMod_IPCSubscriber.IsEnabled && !Plugin.Configuration.UsingAlternativeRotationPlugin)
                                 ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty 需要安裝並載入循環插件（Wrath Combo、Rotation Solver Reborn 或 BossMod AutoRotation）。");
                         }
@@ -264,17 +264,17 @@ namespace AutoDuty.Windows
                         if (ImGui.Button("執行"))
                         {
                             if (Plugin.Configuration.DutyModeEnum == DutyMode.None)
-                                MainWindow.ShowPopup("Error", "You must select a version\nof the dungeon to run");
+                                MainWindow.ShowPopup("錯誤", "請先選擇要執行的副本模式。");
                             else if (Svc.Party.PartyId > 0 && (Plugin.Configuration.DutyModeEnum == DutyMode.Support || Plugin.Configuration.DutyModeEnum == DutyMode.Squadron || Plugin.Configuration.DutyModeEnum == DutyMode.Trust))
-                                MainWindow.ShowPopup("Error", "You must not be in a party to run Support, Squadron or Trust");
+                                MainWindow.ShowPopup("錯誤", "使用任務支援器、冒險者分隊或親信戰友時不可處於玩家隊伍中。");
                             else if (Plugin.Configuration.DutyModeEnum == DutyMode.Regular && !Plugin.Configuration.Unsynced && !Plugin.Configuration.OverridePartyValidation && Svc.Party.PartyId == 0)
-                                MainWindow.ShowPopup("Error", "You must be in a group of 4 to run Regular Duties");
+                                MainWindow.ShowPopup("錯誤", "執行一般副本時必須組成四人隊伍。");
                             else if (Plugin.Configuration.DutyModeEnum == DutyMode.Regular && !Plugin.Configuration.Unsynced && !Plugin.Configuration.OverridePartyValidation && !ObjectHelper.PartyValidation())
-                                MainWindow.ShowPopup("Error", "You must have the correct party makeup to run Regular Duties");
+                                MainWindow.ShowPopup("錯誤", "隊伍職責組成不符合一般副本的進入條件。");
                             else if (ContentPathsManager.DictionaryPaths.ContainsKey(Plugin.CurrentTerritoryContent?.TerritoryType ?? 0))
                                 Plugin.Run();
                             else
-                                MainWindow.ShowPopup("Error", $"No path was found for {Plugin.CurrentTerritoryContent?.TerritoryType} {Plugin.CurrentTerritoryContent?.Name}");
+                                MainWindow.ShowPopup("錯誤", $"找不到 {Plugin.CurrentTerritoryContent?.TerritoryType} {Plugin.CurrentTerritoryContent?.Name} 的路徑。");
                         }
                     }
                     else
@@ -323,20 +323,20 @@ namespace AutoDuty.Windows
                                     ImGui.TextColored(Plugin.LevelingModeEnum == LevelingMode.None ? ImGuiHelper.StateBadColor : ImGuiHelper.StateGoodColor, "選擇練等模式：");
                                     ImGui.SameLine(0);
 
-                                    ImGuiComponents.HelpMarker("Leveling Mode will queue you for the most CONSISTENT dungeon considering your lvl + Ilvl.\n" +
+                                    ImGuiComponents.HelpMarker("練等模式會依角色等級與平均物品品級，選擇運作最穩定的副本。\n" +
                                                                (Plugin.Configuration.DutyModeEnum != DutyMode.Trust ?
                                                                     string.Empty :
-                                                                    "GROUP will level your trust members equally.\nSOLO will only level them as much as needed") +
-                                                               "\n\nIt will NOT always queue you for the highest level dungeon, it follows our stable dungeon list instead.");
+                                                                    "隊伍模式會平均提升親信戰友等級。\n單人模式只會將親信戰友提升到所需等級。") +
+                                                               "\n\n此功能不一定會選擇最高等級副本，而會依照穩定副本清單選擇。");
                                     ImGui.SameLine(0);
                                     ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
                                     if (ImGui.BeginCombo("##LevelingModeEnum", Plugin.LevelingModeEnum switch
                                         {
-                                            LevelingMode.None => "None",
+                                            LevelingMode.None => "無",
                                             _ => $"{Plugin.LevelingModeEnum.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} Auto".Trim()
                                         }))
                                     {
-                                        if (ImGui.Selectable("None", Plugin.LevelingModeEnum == LevelingMode.None))
+                                        if (ImGui.Selectable("無", Plugin.LevelingModeEnum == LevelingMode.None))
                                         {
                                             Plugin.LevelingModeEnum = LevelingMode.None;
                                             Plugin.Configuration.Save();
@@ -378,7 +378,7 @@ namespace AutoDuty.Windows
                                     ImGui.Separator();
                                     if (DutySelected != null && DutySelected.Content.TrustMembers.Count > 0)
                                     {
-                                        ImGuiEx.LineCentered(() => ImGuiEx.TextUnderlined("Select your Trust Party"));
+                                        ImGuiEx.LineCentered(() => ImGuiEx.TextUnderlined("選擇親信戰友隊伍"));
 
 
                                         TrustHelper.ResetTrustIfInvalid();
@@ -441,7 +441,7 @@ namespace AutoDuty.Windows
                                     Plugin.Configuration.Save();
                                 if (Plugin.Configuration.DutyModeEnum is DutyMode.Regular or DutyMode.Trial or DutyMode.Raid)
                                 {
-                                    if (ImGuiEx.CheckboxWrapped("Unsynced", ref Plugin.Configuration.Unsynced))
+                                    if (ImGuiEx.CheckboxWrapped("解除限制", ref Plugin.Configuration.Unsynced))
                                         Plugin.Configuration.Save();
                                 }
                             }
@@ -461,11 +461,11 @@ namespace AutoDuty.Windows
 
                     if (Player.Job.GetCombatRole() == CombatRole.NonCombat)
                     {
-                        ImGuiEx.TextWrapped(new Vector4(255, 1, 0, 1), "Please switch to a combat job to use AutoDuty.");
+                        ImGuiEx.TextWrapped(new Vector4(255, 1, 0, 1), "請切換為戰鬥職業後再使用 AutoDuty。");
                     }
                     else if (Player.Job == Job.BLU && Plugin.Configuration.DutyModeEnum is not (DutyMode.Regular or DutyMode.Trial or DutyMode.Raid))
                     {
-                        ImGuiEx.TextWrapped(new Vector4(0, 1, 1, 1), "Blue Mage cannot run Trust, Duty Support, Squadron or Variant dungeons. Please switch jobs or select a different category.");
+                        ImGuiEx.TextWrapped(new Vector4(0, 1, 1, 1), "青魔法師無法執行親信戰友、任務支援器、冒險者分隊或特殊迷宮。請切換職業或選擇其他分類。");
                     }
                     else if (VNavmesh_IPCSubscriber.IsEnabled && BossMod_IPCSubscriber.IsEnabled)
                     {
@@ -490,7 +490,7 @@ namespace AutoDuty.Windows
                                         }
                                         else
                                         {
-                                            ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), $"Leveling Mode: L{Player.Level} (i{ilvl})");
+                                            ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), $"練等模式：等級 {Player.Level}（物品品級 {ilvl}）");
                                             foreach (var item in LevelingHelper.LevelingDuties.Select((Value, Index) => (Value, Index)))
                                             {
                                                 if (Plugin.Configuration.DutyModeEnum == DutyMode.Trust && !item.Value.DutyModes.HasFlag(DutyMode.Trust))
@@ -537,7 +537,7 @@ namespace AutoDuty.Windows
                                         else
                                         {
                                             if (PlayerHelper.IsReady)
-                                                ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), "Please select one of Support, Trust, Squadron or Regular\nto Populate the Duty List");
+                                                ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), "請選擇任務支援器、親信戰友、冒險者分隊或一般副本，以顯示副本清單。");
                                         }
                                     }
 
@@ -663,14 +663,14 @@ namespace AutoDuty.Windows
                             }
                         }
                         else
-                            ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), "Busy...");
+                            ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), "處理中……");
                     }
                     else
                     {
                         if (!VNavmesh_IPCSubscriber.IsEnabled)
-                            ImGuiEx.TextWrapped(new Vector4(255, 0, 0, 1), "AutoDuty requires vnavmesh plugin to be installed and loaded for proper navigation and movement. Please add 3rd party repo:\nhttps://puni.sh/api/repository/veyn");
+                            ImGuiEx.TextWrapped(new Vector4(255, 0, 0, 1), "AutoDuty 需要安裝並載入 vnavmesh 才能正確導航與移動。請加入第三方插件庫：\nhttps://puni.sh/api/repository/veyn");
                         if (!BossMod_IPCSubscriber.IsEnabled)
-                            ImGuiEx.TextWrapped(new Vector4(255, 0, 0, 1), "AutoDuty requires BossMod plugin to be installed and loaded for proper mechanic handling. Please add 3rd party repo:\nhttps://puni.sh/api/repository/veyn");
+                            ImGuiEx.TextWrapped(new Vector4(255, 0, 0, 1), "AutoDuty 需要安裝並載入 BossMod 才能正確處理副本機制。請加入第三方插件庫：\nhttps://puni.sh/api/repository/veyn");
                     }
                     ImGui.EndListBox();
                 }
