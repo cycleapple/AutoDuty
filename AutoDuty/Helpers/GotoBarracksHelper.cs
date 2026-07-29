@@ -52,7 +52,7 @@ namespace AutoDuty.Helpers
             if (GotoHelper.State == ActionState.Running)
                 return;
 
-            Plugin.Action = "Retiring to Barracks";
+            Plugin.Action = "正在前往兵營休息";
 
             if (Svc.ClientState.TerritoryType == BarracksTerritoryType(PlayerHelper.GetGrandCompany()))
             {

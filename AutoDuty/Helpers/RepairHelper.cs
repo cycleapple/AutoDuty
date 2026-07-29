@@ -81,7 +81,7 @@ namespace AutoDuty.Helpers
             if (GotoHelper.State == ActionState.Running)
                 return;
 
-            Plugin.Action = "Repairing";
+            Plugin.Action = "正在修理";
 
             if (Plugin.Configuration.AutoRepairSelf)
             {

@@ -14,7 +14,7 @@ namespace AutoDuty.Helpers
     internal class GCTurninHelper : ActiveHelperBase<GCTurninHelper>
     {
         protected override string Name        { get; } = nameof(GCTurninHelper);
-        protected override string DisplayName { get; } = "GC Turnin";
+        protected override string DisplayName { get; } = "繳交大國防聯軍籌備品";
 
         public override string[]? Commands { get; init; } = ["turnin", "gcturnin"];
         public override string? CommandDescription { get; init; } = "Automatically turns in items into the Grand Company Supply";
@@ -90,7 +90,7 @@ namespace AutoDuty.Helpers
                 //DebugLog("Goto Running");
                 return;
             }
-            Plugin.Action = "GC Turning In";
+            Plugin.Action = "正在繳交大國防聯軍籌備品";
 
             if (GotoHelper.State != ActionState.Running && Svc.ClientState.TerritoryType != PlayerHelper.GetGrandCompanyTerritoryType(PlayerHelper.GetGrandCompany()))
             {

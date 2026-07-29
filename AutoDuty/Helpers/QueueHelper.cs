@@ -23,7 +23,7 @@ namespace AutoDuty.Helpers
             _dutyMode = DutyMode.None;
             Svc.Log.Info("Queueing: Accepting only");
             Instance.Start();
-            Plugin.Action = "Queueing: Waiting to accept";
+            Plugin.Action = "正在排入副本：等待確認";
         }
 
         internal static void Invoke(Content? content, DutyMode dutyMode)
@@ -35,12 +35,12 @@ namespace AutoDuty.Helpers
                 Svc.Log.Info($"Queueing: {dutyMode}: {content.Name}");
 
                 Instance.Start();
-                Plugin.Action = $"Queueing {_dutyMode}: {content.Name}";
+                Plugin.Action = $"正在排入副本（{_dutyMode}）：{content.Name}";
             }
         }
 
         protected override string Name        => nameof(QueueHelper);
-        protected override string DisplayName => $"Queueing {_dutyMode}: {_content?.Name}";
+        protected override string DisplayName => $"正在排入副本（{_dutyMode}）：{_content?.Name}";
 
         internal override void Stop()
         {

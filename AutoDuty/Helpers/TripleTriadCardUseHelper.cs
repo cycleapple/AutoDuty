@@ -17,7 +17,7 @@ namespace AutoDuty.Helpers
     internal class TripleTriadCardUseHelper : ActiveHelperBase<TripleTriadCardUseHelper>
     {
         protected override string Name        { get; } = nameof(TripleTriadCardUseHelper);
-        protected override string DisplayName { get; } = "Registering Cards";
+        protected override string DisplayName { get; } = "正在登錄九宮幻卡";
 
         public override string[]? Commands { get; init; } = ["ttreg", "registercards"];
         public override string? CommandDescription { get; init; } = "Automatically registers Triple Triad cards in your inventory";

@@ -14,7 +14,7 @@ namespace AutoDuty.Helpers
     internal class DiscardHelper : ActiveHelperBase<DiscardHelper>
     {
         protected override string Name        { get; } = nameof(DiscardHelper);
-        protected override string DisplayName { get; } = "Discarding Items";
+        protected override string DisplayName { get; } = "正在丟棄物品";
 
         private bool started = false;
 

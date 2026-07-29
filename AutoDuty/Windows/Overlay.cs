@@ -151,16 +151,16 @@ public unsafe class Overlay : Window
                                         Plugin.Configuration.Save();
                                     }
 
-                                    hideText = ImGui.IsItemHovered() ? "Hide" : string.Empty;
+                                    hideText = ImGui.IsItemHovered() ? "隱藏" : string.Empty;
 
                                     ImGui.SameLine(0, 5);
 
                                     if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.States.HasFlag(PluginState.Navigating))
                                         loopsText =
-                                            $"{(Plugin.CurrentTerritoryContent?.Name!.Length > 20 ? Plugin.CurrentTerritoryContent?.Name![..17] + "..." : Plugin.CurrentTerritoryContent?.Name)}{(Plugin.States.HasFlag(PluginState.Navigating) ? $": {Plugin.CurrentLoop} of {Plugin.Configuration.LoopTimes} Loops" : "")}";
+                                            $"{(Plugin.CurrentTerritoryContent?.Name!.Length > 20 ? Plugin.CurrentTerritoryContent?.Name![..17] + "..." : Plugin.CurrentTerritoryContent?.Name)}{(Plugin.States.HasFlag(PluginState.Navigating) ? $"：第 {Plugin.CurrentLoop}／{Plugin.Configuration.LoopTimes} 次循環" : "")}";
                                     else
                                         loopsText =
-                                            $"{(Plugin.CurrentTerritoryContent?.Name!.Length > 40 ? Plugin.CurrentTerritoryContent?.Name![..37] + "..." : Plugin.CurrentTerritoryContent?.Name)}{(Plugin.States.HasFlag(PluginState.Navigating) ? $": {Plugin.CurrentLoop} of {Plugin.Configuration.LoopTimes} Loops" : "")}";
+                                            $"{(Plugin.CurrentTerritoryContent?.Name!.Length > 40 ? Plugin.CurrentTerritoryContent?.Name![..37] + "..." : Plugin.CurrentTerritoryContent?.Name)}{(Plugin.States.HasFlag(PluginState.Navigating) ? $"：第 {Plugin.CurrentLoop}／{Plugin.Configuration.LoopTimes} 次循環" : "")}";
 
                                     ImGui.TextColored(new Vector4(93 / 255f, 226 / 255f, 231 / 255f, 1), loopsText);
                                 });
@@ -179,7 +179,7 @@ public unsafe class Overlay : Window
                                         Plugin.Configuration.Save();
                                     }
 
-                                    hideTextAction = ImGui.IsItemHovered() ? "Hide" : "";
+                                    hideTextAction = ImGui.IsItemHovered() ? "隱藏" : "";
 
                                     ImGui.SameLine(0, 5);
                                     ImGui.TextColored(new Vector4(0, 255f, 0, 1), Plugin.Action.Length > 40 ? Plugin.Action[..37] + "..." : Plugin.Action);

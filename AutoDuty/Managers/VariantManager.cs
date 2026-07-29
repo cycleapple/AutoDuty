@@ -17,7 +17,7 @@ namespace AutoDuty.Managers
                 return;
             _taskManager.Enqueue(() => Svc.Log.Info($"Queueing Duty: {content.Name}"), "RegisterVariantDuty");
             _taskManager.Enqueue(() => Svc.Log.Info($"Index#: {content.VVDIndex}"), "RegisterVariantDuty");
-            _taskManager.Enqueue(() => Plugin.Action = $"Queueing Duty: {content.Name}", "RegisterVariantDuty");
+            _taskManager.Enqueue(() => Plugin.Action = $"正在排入副本：{content.Name}", "RegisterVariantDuty");
             AtkUnitBase* addon = null;
             AtkUnitBase* yesno = null;
 

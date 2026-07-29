@@ -333,7 +333,7 @@ namespace AutoDuty.Windows
                                     if (ImGui.BeginCombo("##LevelingModeEnum", Plugin.LevelingModeEnum switch
                                         {
                                             LevelingMode.None => "無",
-                                            _ => $"{Plugin.LevelingModeEnum.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} Auto".Trim()
+                                            _ => $"{Plugin.LevelingModeEnum.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} 自動".Trim()
                                         }))
                                     {
                                         if (ImGui.Selectable("無", Plugin.LevelingModeEnum == LevelingMode.None))
@@ -343,7 +343,7 @@ namespace AutoDuty.Windows
                                         }
 
                                         LevelingMode autoLevelMode = (Plugin.Configuration.DutyModeEnum == DutyMode.Support ? LevelingMode.Support : LevelingMode.Trust_Group);
-                                        if (ImGui.Selectable($"{autoLevelMode.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} Auto".Trim(), Plugin.LevelingModeEnum == autoLevelMode))
+                                        if (ImGui.Selectable($"{autoLevelMode.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} 自動".Trim(), Plugin.LevelingModeEnum == autoLevelMode))
                                         {
                                             Plugin.LevelingModeEnum = autoLevelMode;
                                             Plugin.Configuration.Save();
@@ -352,7 +352,7 @@ namespace AutoDuty.Windows
                                         }
 
                                         if (Plugin.Configuration.DutyModeEnum == DutyMode.Trust)
-                                            if (ImGui.Selectable($"{LevelingMode.Trust_Solo.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} Auto".Trim(), Plugin.LevelingModeEnum == LevelingMode.Trust_Solo))
+                                            if (ImGui.Selectable($"{LevelingMode.Trust_Solo.ToCustomString().Replace(Plugin.Configuration.DutyModeEnum.ToString(), null)} 自動".Trim(), Plugin.LevelingModeEnum == LevelingMode.Trust_Solo))
                                             {
                                                 Plugin.LevelingModeEnum = LevelingMode.Trust_Solo;
                                                 Plugin.Configuration.Save();

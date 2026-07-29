@@ -117,7 +117,7 @@ namespace AutoDuty.Helpers
             if (GotoHelper.State == ActionState.Running)
                 return;
 
-            Plugin.Action = $"Retiring to {_whichHousing}";
+            Plugin.Action = $"正在前往住宅休息（{_whichHousing}）";
 
             if (InPrivateHouse(_whichHousing))
             {

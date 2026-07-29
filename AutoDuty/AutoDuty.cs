@@ -1545,7 +1545,7 @@ public sealed class AutoDuty : IDalamudPlugin
         {
             CurrentTerritoryContent = null;
             PathFile = "";
-            MainWindow.ShowPopup("Error", "Unable to load content for Territory");
+            MainWindow.ShowPopup("錯誤", "無法載入目前區域的副本資料。");
             return;
         }
         //MainWindow.OpenTab("Mini");

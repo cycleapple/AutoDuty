@@ -9,7 +9,7 @@
     internal class PortraitHelper : ActiveHelperBase<PortraitHelper>
     {
         protected override string Name        { get; } = nameof(PortraitHelper);
-        protected override string DisplayName { get; } = "Updating Portrait";
+        protected override string DisplayName { get; } = "正在更新肖像";
         protected override int    TimeOut     { get; set; } = 10_000;
 
         internal override void Start()

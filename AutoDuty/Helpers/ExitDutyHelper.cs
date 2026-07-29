@@ -9,7 +9,7 @@ namespace AutoDuty.Helpers
     internal class ExitDutyHelper : ActiveHelperBase<ExitDutyHelper>
     {
         protected override string Name        => nameof(ExitDutyHelper);
-        protected override string DisplayName => "Exiting Duty";
+        protected override string DisplayName => "正在退出副本";
 
         public override string[]? Commands           { get; init; } = ["exitduty"];
         public override string?   CommandDescription { get; init; } = "Exits the current duty if you are not in combat";

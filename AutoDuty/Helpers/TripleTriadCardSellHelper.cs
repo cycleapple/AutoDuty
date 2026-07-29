@@ -18,7 +18,7 @@ namespace AutoDuty.Helpers
     internal class TripleTriadCardSellHelper : ActiveHelperBase<TripleTriadCardSellHelper>
     {
         protected override string Name        { get; } = nameof(TripleTriadCardSellHelper);
-        protected override string DisplayName { get; } = "Selling TTT Cards";
+        protected override string DisplayName { get; } = "正在出售九宮幻卡";
 
         public override string[]? Commands           { get; init; } = ["ttsell", "sellcards"];
         public override string?   CommandDescription { get; init; } = "Sells Triple Triad cards to the vendor in Gold Saucer";

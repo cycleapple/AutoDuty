@@ -163,7 +163,7 @@ public class ConfigurationMain
                 if(stepBlock)
                     if (Instance.host)
                     {
-                        Plugin.Action = "Waiting for clients";
+                        Plugin.Action = "正在等待其他客戶端";
                         Server.CheckStepProgress();
                     }
                     else
@@ -564,7 +564,7 @@ public class ConfigurationMain
                     DebugLog("Client not connected, cannot send step completed.");
                     return;
                 }
-                Plugin.Action = "Waiting for others";
+                Plugin.Action = "正在等待其他角色";
                 clientSS.WriteString(STEP_COMPLETED);
                 DebugLog("Step completed sent to server.");
             }
@@ -1483,7 +1483,7 @@ public static class ConfigTab
                     if (ImGui.Checkbox("前往", ref Configuration.GotoButton))
                         Configuration.Save();
                     ImGui.NextColumn();
-                    if (ImGui.Checkbox("Turnin", ref Configuration.TurninButton))
+                    if (ImGui.Checkbox("繳交", ref Configuration.TurninButton))
                         Configuration.Save();
                     ImGui.NextColumn();
                     if (ImGui.Checkbox("分解", ref Configuration.DesynthButton))
@@ -1498,10 +1498,10 @@ public static class ConfigTab
                     if (ImGui.Checkbox("裝備", ref Configuration.EquipButton))
                         Configuration.Save();
                     ImGui.NextColumn();
-                    if (ImGui.Checkbox("Coffer", ref Configuration.CofferButton))
+                    if (ImGui.Checkbox("寶箱", ref Configuration.CofferButton))
                         Configuration.Save();
                     ImGui.NextColumn();
-                    if (ImGui.Checkbox("Triple Triad##TTButton", ref Configuration.TTButton))
+                    if (ImGui.Checkbox("九宮幻卡##TTButton", ref Configuration.TTButton))
                         Configuration.Save();
                     ImGui.Unindent();
                 }
@@ -3090,13 +3090,13 @@ public static class ConfigTab
             if (ImGui.Checkbox($"{checkbox}{(execute ? ":" : string.Empty)} ", ref execute))
                 Configuration.Save();
 
-            ImGuiComponents.HelpMarker($"{checkbox}.\nFor example, /echo test");
+            ImGuiComponents.HelpMarker($"{checkbox}。\n例如：/echo test");
 
             if (execute)
             {
                 ImGui.Indent();
                 ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X - 185 * ImGuiHelpers.GlobalScale);
-                if (ImGui.InputTextWithHint($"##Commands{checkbox}", "enter command starting with /", ref curCommand, 500, ImGuiInputTextFlags.EnterReturnsTrue))
+                if (ImGui.InputTextWithHint($"##Commands{checkbox}", "輸入以 / 開頭的指令", ref curCommand, 500, ImGuiInputTextFlags.EnterReturnsTrue))
                 {
                     if (!curCommand.IsNullOrEmpty() && curCommand[0] == '/' && (ImGui.IsKeyDown(ImGuiKey.Enter) || ImGui.IsKeyDown(ImGuiKey.KeypadEnter)))
                     {
@@ -3110,7 +3110,7 @@ public static class ConfigTab
                 ImGui.SameLine(0, 5);
                 using (ImRaii.Disabled(curCommand.IsNullOrEmpty() || curCommand[0] != '/'))
                 {
-                    if (ImGui.Button($"Add Command##CommandButton{checkbox}"))
+                    if (ImGui.Button($"加入指令##CommandButton{checkbox}"))
                     {
                         commands.Add(curCommand);
                         Configuration.Save();

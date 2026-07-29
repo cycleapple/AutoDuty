@@ -99,7 +99,7 @@ namespace AutoDuty.Helpers
             if (GotoHelper.State == ActionState.Running)
                 return;
 
-            Plugin.Action = "Retiring to Inn";
+            Plugin.Action = "正在前往旅館休息";
 
             if (Svc.ClientState.TerritoryType == InnTerritoryType(_whichGrandCompany))
             {

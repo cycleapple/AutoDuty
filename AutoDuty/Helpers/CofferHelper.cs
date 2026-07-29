@@ -26,7 +26,7 @@ namespace AutoDuty.Helpers
         }
 
         protected override string Name        { get; } = nameof(CofferHelper);
-        protected override string DisplayName { get; } = "Opening Coffers";
+        protected override string DisplayName { get; } = "正在開啟寶箱";
 
         protected override unsafe void HelperUpdate(IFramework framework)
         {

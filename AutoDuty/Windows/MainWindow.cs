@@ -200,7 +200,7 @@ public class MainWindow : Window, IDisposable
                             if (AutoRetainer_IPCSubscriber.IsEnabled)
                                 GCTurninHelper.Invoke();
                             else
-                                ShowPopup("Missing Plugin", "GC Turnin Requires AutoRetainer plugin. Get @ https://love.puni.sh/ment.json");
+                                ShowPopup("缺少插件", "繳交大國防聯軍籌備品需要 AutoRetainer 插件。\n取得位置：https://love.puni.sh/ment.json");
                         }
                         if (AutoRetainer_IPCSubscriber.IsEnabled)
                             ToolTip("Click to Goto GC Turnin and Invoke AutoRetainer's GC Turnin");
@@ -244,7 +244,7 @@ public class MainWindow : Window, IDisposable
                             if (QuestManager.IsQuestComplete(66174))
                                 ExtractHelper.Invoke();
                             else
-                                ShowPopup("Missing Quest Completion", "Materia Extraction requires having completed quest: Forging the Spirit");
+                                ShowPopup("尚未完成必要任務", "精製魔晶石需要先完成任務「情感培育之力」。");
                         }
                         if (QuestManager.IsQuestComplete(66174))
                             ToolTip("Click to Extract Materia");
@@ -448,7 +448,18 @@ public class MainWindow : Window, IDisposable
             if (x.color != null)
                 ImGui.PushStyleColor(ImGuiCol.Tab, x.color.Value);
 
-            if ((valid || x.name == "Info") && ImGui.BeginTabItem(x.name, openTabName == x.name ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None))
+            string visibleTabName = x.name switch
+            {
+                "Main" => "主要",
+                "Build" => "建立",
+                "Paths" => "路徑",
+                "Config" => "設定",
+                "Info" => "資訊",
+                "Logs" => "日誌",
+                _ => x.name
+            };
+
+            if ((valid || x.name == "Info") && ImGui.BeginTabItem($"{visibleTabName}###{x.name}", openTabName == x.name ? ImGuiTabItemFlags.SetSelected : ImGuiTabItemFlags.None))
             {
                 if (x.color != null)
                     ImGui.PopStyleColor();

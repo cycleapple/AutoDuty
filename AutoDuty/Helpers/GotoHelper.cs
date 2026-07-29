@@ -107,7 +107,7 @@ namespace AutoDuty.Helpers
 
             EzThrottler.Throttle("Goto", 50);
 
-            Plugin.Action = $"Going to {TerritoryName.GetTerritoryName(_territoryType)}{(_moveLocations.Count > 0 ? $" at {_moveLocations[^1]}" : "")}";
+            Plugin.Action = $"正在前往 {TerritoryName.GetTerritoryName(_territoryType)}{(_moveLocations.Count > 0 ? $"（座標：{_moveLocations[^1]}）" : "")}";
 
             if (Svc.ClientState.LocalPlayer == null)
                 return;

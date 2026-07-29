@@ -15,7 +15,7 @@ namespace AutoDuty.Helpers
     internal class PluginInstaller : ActiveHelperBase<PluginInstaller>
     {
         protected override string Name        { get; } = "Plugin Installer";
-        protected override string DisplayName { get; } = "Plugin Installer";
+        protected override string DisplayName { get; } = "正在安裝插件";
 
         private static ExternalPlugin? pluginToInstall;
         private Task<bool>?     installTask;

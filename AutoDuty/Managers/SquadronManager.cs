@@ -28,7 +28,7 @@ namespace AutoDuty.Managers
                 return;
             }
             _taskManager.Enqueue(() => Svc.Log.Info($"Queueing Squadron: {content.Name}"), "RegisterSquadron");
-            _taskManager.Enqueue(() => Plugin.Action = $"Queueing Squadron: {content.Name}", "RegisterSquadron");
+            _taskManager.Enqueue(() => Plugin.Action = $"正在排入冒險者分隊副本：{content.Name}", "RegisterSquadron");
 
             AtkUnitBase* captureAddon = null;
 

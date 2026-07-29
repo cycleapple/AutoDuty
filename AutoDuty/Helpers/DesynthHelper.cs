@@ -21,7 +21,7 @@ namespace AutoDuty.Helpers
     internal class DesynthHelper : ActiveHelperBase<DesynthHelper>
     {
         protected override string Name        => nameof(DesynthHelper);
-        protected override string DisplayName => "Desynthing";
+        protected override string DisplayName => "正在分解";
 
         public override string[]? Commands { get; init; } = ["desynth"];
         public override string? CommandDescription { get; init; } = "Desynth's items in your inventory";
@@ -53,7 +53,7 @@ namespace AutoDuty.Helpers
                 return;
             }
 
-            Plugin.Action = "Desynthing Inventory";
+            Plugin.Action = "正在分解物品欄中的物品";
 
             if (InventoryManager.Instance()->GetEmptySlotsInBag() < 1)
             {

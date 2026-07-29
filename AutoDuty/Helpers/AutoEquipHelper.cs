@@ -37,7 +37,7 @@ namespace AutoDuty.Helpers
         private GearsetUpdateSource source;
 
         protected override string Name        => nameof(AutoEquipHelper);
-        protected override string DisplayName => "Auto Equip";
+        protected override string DisplayName => "自動裝備";
 
         protected override int TimeOut { get; set; }
 

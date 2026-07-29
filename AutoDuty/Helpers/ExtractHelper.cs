@@ -11,7 +11,7 @@ namespace AutoDuty.Helpers
     internal class ExtractHelper : ActiveHelperBase<ExtractHelper>
     {
         protected override string Name        => nameof(ExtractHelper);
-        protected override string DisplayName => "Extracting Materia";
+        protected override string DisplayName => "正在精製魔晶石";
 
         public override string[]? Commands { get; init; } = ["extract"];
         public override string? CommandDescription { get; init; } = "Extract's materia from equipment";
@@ -55,7 +55,7 @@ namespace AutoDuty.Helpers
                 return;
             }
 
-            Plugin.Action = "Extracting Materia";
+            Plugin.Action = "正在精製魔晶石";
 
             if (InventoryManager.Instance()->GetEmptySlotsInBag() < 1)
             {
