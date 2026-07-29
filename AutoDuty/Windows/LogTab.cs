@@ -99,7 +99,7 @@ namespace AutoDuty.Windows
                 ImGui.EndPopup();
             }
             if (ImGui.IsItemHovered())
-                ImGui.SetTooltip("Click to open the Create Issue popup (after authenticating with github) to fill in the form and submit and issue to the Repo");
+                ImGui.SetTooltip("開啟問題回報視窗；完成 GitHub 驗證後即可填寫並送出至專案儲存庫");
             ImGui.SameLine();
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
             if (ImGuiEx.EnumCombo("##LogEventLevel", ref Plugin.Configuration.LogEventLevel))
@@ -115,7 +115,7 @@ namespace AutoDuty.Windows
 
             if (Plugin.Configuration.LogEventLevel < LogEventLevel.Information)
             {
-                ImGui.TextWrapped("AutoDuty can't change the log level dalamud uses. To see debug related things, you have to go in the dalamud log \"/xllog\" and set the appropriate level in the top left.");
+                ImGui.TextWrapped("AutoDuty 無法變更 Dalamud 使用的日誌等級。若要查看偵錯資訊，請輸入「/xllog」開啟 Dalamud 日誌，並在左上角選擇適當的等級。");
             }
 
             ImGuiEx.Spacing();
@@ -156,7 +156,7 @@ namespace AutoDuty.Windows
                     if ((_pollResponse == null || _pollResponse.Access_Token.IsNullOrEmpty()) && EzThrottler.Throttle("Polling", _pollResponse != null && _pollResponse.Interval != -1 ? _pollResponse.Interval * 1100 : _userCode!.Interval * 1100))
                         _taskPollResponse = Task.Run(() => PollResponse(_userCode));
                 }
-                ImGui.TextColored(ImGuiColors.HealerGreen, $"Polling Github for User Authorization: {(_pollResponse != null ? (_pollResponse.Access_Token.IsNullOrEmpty() ? $"{_pollResponse.Error}" : $"{_pollResponse.Access_Token}") : "")}");
+                ImGui.TextColored(ImGuiColors.HealerGreen, $"正在向 GitHub 查詢使用者授權：{(_pollResponse != null ? (_pollResponse.Access_Token.IsNullOrEmpty() ? $"{_pollResponse.Error}" : $"{_pollResponse.Access_Token}") : "")}");
             }
             else if (_taskUserCode != null && !_taskUserCode.IsCompletedSuccessfully)
             {
@@ -172,13 +172,13 @@ namespace AutoDuty.Windows
             else if (_userCode != null)
             {
                 ImGui.PushStyleColor(ImGuiCol.Button, ImGuiColors.ParsedBlue);
-                if (ImGuiEx.Button("Click Here"))
+                if (ImGuiEx.Button("按此複製"))
                 {
                     ImGui.SetClipboardText(_userCode.User_Code);
                     _copied = true;
                 }
                 ImGui.SameLine();
-                ImGui.Text($" to Copy ");
+                ImGui.Text("授權碼：");
                 ImGui.SameLine();
                 Vector4 vector4 = new(0, 1, 0, 1);
                 ImGui.TextColored(vector4, _userCode.User_Code);
@@ -188,7 +188,7 @@ namespace AutoDuty.Windows
                     _copied = true;
                 }
                 ImGui.SameLine();
-                ImGui.Text(" to the ClipBoard and:");
+                ImGui.Text("已可複製到剪貼簿，接著：");
                 using (ImRaii.Disabled(!_copied))
                 {
                     if (ImGui.Button("開啟 GitHub###OpenUri"))
@@ -199,7 +199,7 @@ namespace AutoDuty.Windows
                     }
                     ImGui.PopStyleColor();
                     ImGui.SameLine();
-                    ImGui.Text($" in your browser and Paste it");
+                    ImGui.Text("在瀏覽器開啟 GitHub 並貼上授權碼");
                 }
             }
         }
@@ -226,7 +226,7 @@ namespace AutoDuty.Windows
             ImGui.InputText("##TitleInput", ref _titleInput, 500);
             ImGui.Separator();
             ImGui.NewLine();
-            ImGui.TextWrapped("Please make sure someone else hasn't reported the same bug by going to the issues page and searching for a similar issue. If you find a similar issue, please react to the initial post with 👍 to increase its priority.");
+            ImGui.TextWrapped("送出前請先前往問題頁面搜尋是否已有相同回報。若找到類似問題，請在原始貼文按下 👍，協助提高處理優先度。");
             if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                 GenericHelpers.ShellStart("https://github.com/ffxivcode/AutoDuty/issues");
             ImGui.NewLine();

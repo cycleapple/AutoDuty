@@ -389,7 +389,7 @@ public class MainWindow : Window, IDisposable
         {
             ImGuiEx.TextCentered(_popupText);
             ImGui.Spacing();
-            if (ImGuiHelper.CenteredButton("OK", .5f, 15))
+            if (ImGuiHelper.CenteredButton("確定", .5f, 15))
             {
                 _showPopup = false;
                 ImGui.CloseCurrentPopup();
@@ -487,7 +487,7 @@ public class MainWindow : Window, IDisposable
         ("Config", ConfigTab.Draw, null, false),
         ("Info", InfoTab.Draw, null, false),
         ("Logs", LogTab.Draw, null, false),
-        ("Support AutoDuty", KofiLink, ImGui.ColorConvertU32ToFloat4(ColorNormal), false)
+        ("贊助 AutoDuty", KofiLink, ImGui.ColorConvertU32ToFloat4(ColorNormal), false)
     ];
 
     public override void Draw()
@@ -497,9 +497,9 @@ public class MainWindow : Window, IDisposable
         if(DalamudInfoHelper.IsOnStaging())
         {
             ImGui.TextColored(GradientColor.Get(ImGuiHelper.ExperimentalColor, ImGuiHelper.ExperimentalColor2, 500), "不支援測試版 Dalamud。");
-            ImGui.Text("Please type in \"/xlbranch\" and pick Release, then restart the game.");
+            ImGui.Text("請輸入「/xlbranch」並選擇 Release，接著重新啟動遊戲。");
 
-            if (!ImGui.CollapsingHeader("Use despite staging. Support will not be given##stagingHeader"))
+            if (!ImGui.CollapsingHeader("仍要在測試版使用（不提供支援）##stagingHeader"))
                 return;
         }
 
