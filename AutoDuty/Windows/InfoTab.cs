@@ -22,19 +22,19 @@ namespace AutoDuty.Windows
             if (MainWindow.CurrentTabName != "Info")
                 MainWindow.CurrentTabName = "Info";
             ImGui.NewLine();
-            ImGuiEx.TextWrapped("For assistance with general setup for both AutoDuty and it's dependencies, be sure to check out the setup guide below for more information:");
+            ImGuiEx.TextWrapped("若需要協助設定 AutoDuty 及其相依插件，請查看下方的設定指南以取得詳細資訊：");
             ImGui.NewLine();
             ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("資訊與設定").X) / 2);
             if (ImGui.Button("資訊與設定"))
                 Process.Start("explorer.exe", infoUrl);
             ImGui.NewLine();
-            ImGuiEx.TextWrapped("The above guide also has information on the status of each path, such as Path maturity, module maturity, and general consistency of each path. You can also review additional notes or considerations, that may need to be made on your part for successful looping. For requests, issues, or contributions to AD, please use the AutoDuty Github to open an issue:");
+            ImGuiEx.TextWrapped("上述指南也會列出各路徑的狀態，包括路徑成熟度、模組成熟度與整體穩定性。你也可以查看成功循環時需要留意的附註與事項。若要提出功能需求、回報問題或參與 AutoDuty 開發，請前往 GitHub 建立問題：");
             ImGui.NewLine();
             ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("GitHub 問題回報").X) / 2);
             if (ImGui.Button("GitHub 問題回報"))
                 Process.Start("explorer.exe", gitIssueUrl);
             ImGui.NewLine();
-            ImGuiEx.TextCentered("For everything else, join the discord!");
+            ImGuiEx.TextCentered("若有其他問題，歡迎加入 Discord！");
             ImGui.NewLine();
             ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("Punish Discord").X) / 2);
             if (ImGui.Button("Punish Discord"))
@@ -71,8 +71,8 @@ namespace AutoDuty.Windows
             ImGui.SetColumnWidth(0, 60);
             ImGui.SetColumnWidth(1, 100);
 
-            PluginInstallLine(ExternalPlugin.BossMod, "handles boss fights for you");
-            PluginInstallLine(ExternalPlugin.vnav, "can move you around");
+            PluginInstallLine(ExternalPlugin.BossMod, "協助處理首領戰機制");
+            PluginInstallLine(ExternalPlugin.vnav, "提供導航與移動功能");
 
             ImGui.Columns(1);
             ImGui.NewLine();
@@ -87,9 +87,9 @@ namespace AutoDuty.Windows
             ImGui.SetColumnWidth(0, 60);
             ImGui.SetColumnWidth(1, 100);
 
-            PluginInstallLine(ExternalPlugin.BossMod,              "has integrated rotations");
-            PluginInstallLine(ExternalPlugin.WrathCombo,           "Puni.sh's dedicated rotation plugin");
-            PluginInstallLine(ExternalPlugin.RotationSolverReborn, "Reborn's rotation plugin");
+            PluginInstallLine(ExternalPlugin.BossMod,              "內建技能循環功能");
+            PluginInstallLine(ExternalPlugin.WrathCombo,           "Puni.sh 的專用技能循環插件");
+            PluginInstallLine(ExternalPlugin.RotationSolverReborn, "Combat Reborn 的技能循環插件");
 
             ImGui.Columns(1);
             ImGui.NewLine();
@@ -100,13 +100,13 @@ namespace AutoDuty.Windows
             ImGui.SetColumnWidth(0, 60);
             ImGui.SetColumnWidth(1, 100);
 
-            PluginInstallLine(ExternalPlugin.AntiAFK,      "keeps you from being marked as afk");
-            PluginInstallLine(ExternalPlugin.AutoRetainer, "can be triggered, does GC delivery and discarding");
-            PluginInstallLine(ExternalPlugin.Avarice,      "is read for positionals");
-            PluginInstallLine(ExternalPlugin.Lifestream,   "incredibly extensive teleporting");
-            PluginInstallLine(ExternalPlugin.Pandora,      "chest looting + tankstance");
-            PluginInstallLine(ExternalPlugin.Gearsetter,   "recommend items to equip");
-            PluginInstallLine(ExternalPlugin.Stylist,      "recommend items to equip");
+            PluginInstallLine(ExternalPlugin.AntiAFK,      "避免被標記為暫離");
+            PluginInstallLine(ExternalPlugin.AutoRetainer, "可供 AutoDuty 呼叫，支援籌備品繳交與丟棄物品");
+            PluginInstallLine(ExternalPlugin.Avarice,      "提供身位判定資訊");
+            PluginInstallLine(ExternalPlugin.Lifestream,   "提供完整的傳送功能");
+            PluginInstallLine(ExternalPlugin.Pandora,      "拾取寶箱與自動開啟防護職姿態");
+            PluginInstallLine(ExternalPlugin.Gearsetter,   "推薦可裝備的物品");
+            PluginInstallLine(ExternalPlugin.Stylist,      "推薦可裝備的物品");
 
 
             ImGui.Columns(1);

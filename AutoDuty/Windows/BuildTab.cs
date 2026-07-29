@@ -41,7 +41,7 @@ namespace AutoDuty.Windows
         private static          bool                     _showAddActionUI    = false;
         private static          (string, string, string) _dropdownSelected   = (string.Empty, string.Empty, string.Empty);
         private static          int                      _buildListSelected  = -1;
-        private static          string                   _addActionButton    = "Add";
+        private static          string                   _addActionButton    = "新增";
         private static          bool                     _dragDrop           = false;
         private static          bool                     _noArgument         = false;
         private static          bool                     _comment            = false;
@@ -108,14 +108,14 @@ namespace AutoDuty.Windows
                 Plugin.Actions.Add(new PathAction { Name = "MoveTo", Position = Player.Position });
             }
             ImGui.SameLine(0, 5);
-            ImGuiComponents.HelpMarker("Adds a MoveTo step to the path, AutoDuty will Move to the specified position");
-            if (ImGuiEx.ButtonWrapped("Add Action"))
+            ImGuiComponents.HelpMarker("在路徑中加入 MoveTo 步驟，AutoDuty 會移動至指定座標。");
+            if (ImGuiEx.ButtonWrapped("加入動作"))
             {
                 if (_showAddActionUI)
                     ClearAll();
                 ImGui.OpenPopup("AddActionPopup");
             }
-            ImGuiComponents.HelpMarker("Opens the Add Action popup menu to add action steps to the path");
+            ImGuiComponents.HelpMarker("開啟動作選單，將動作步驟加入路徑。");
             if (ImGui.BeginPopup("AddActionPopup"))
             {
                 if (ActionsList == null)
@@ -130,7 +130,7 @@ namespace AutoDuty.Windows
                         _argumentHint = item.Item2.Equals("false", StringComparison.InvariantCultureIgnoreCase) ? string.Empty : item.Item2;
                         _actionText = item.Item1;
                         _noArgument = item.Item2.Equals("false", StringComparison.InvariantCultureIgnoreCase);
-                        _addActionButton = "Add";
+                        _addActionButton = "新增";
                         _comment = item.Item1.Equals("<-- Comment -->", StringComparison.InvariantCultureIgnoreCase);
                         _position = Player.Available ? Player.Position : Vector3.Zero;
                         _actionTag = ActionTag.None;
@@ -175,26 +175,26 @@ namespace AutoDuty.Windows
                 }
                 ImGui.EndPopup();
             }
-            if (_showAddActionUI && !ImGui.IsPopupOpen($"Add Action: ({_action?.Name})###AddActionUI"))
+            if (_showAddActionUI && !ImGui.IsPopupOpen($"加入動作：({_action?.Name})###AddActionUI"))
             {
                 ImGui.SetNextWindowSize(new Vector2(ImGui.CalcTextSize("X").X * 55, ImGui.GetTextLineHeight() * 7), ImGuiCond.FirstUseEver);
                 ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.FirstUseEver, new(0.5f, 0.5f));
-                ImGui.OpenPopup($"Add Action: ({_action?.Name})###AddActionUI");
+                ImGui.OpenPopup($"加入動作：({_action?.Name})###AddActionUI");
             }
-            if (ImGui.BeginPopupModal($"Add Action: ({_action?.Name})###AddActionUI", ref _showAddActionUI))
+            if (ImGui.BeginPopupModal($"加入動作：({_action?.Name})###AddActionUI", ref _showAddActionUI))
             {
                 DrawAddActionUIPopup();
                 ImGui.EndPopup();
             }
             ImGui.SameLine(0, 5);
-            if (ImGuiEx.ButtonWrapped("Clear Path"))
+            if (ImGuiEx.ButtonWrapped("清除路徑"))
             {
                 Plugin.Actions.Clear();
                 ClearAll();
             }
-            ImGuiComponents.HelpMarker("Clears the entire path, NOTE: there is no confirmation");
+            ImGuiComponents.HelpMarker("清除整條路徑。請注意：此操作不會再次確認。");
             ImGui.SameLine(0, 5);
-            if (ImGuiEx.ButtonWrapped("Save Path"))
+            if (ImGuiEx.ButtonWrapped("儲存路徑"))
             {
                 try
                 {
@@ -238,20 +238,20 @@ namespace AutoDuty.Windows
                     //throw;
                 }
             }
-            ImGuiComponents.HelpMarker("Saves the path to the path file specified or the default");
+            ImGuiComponents.HelpMarker("將路徑儲存至指定的路徑檔案；未指定時使用預設檔案。");
             ImGui.SameLine(0, 5);
-            if (ImGuiEx.ButtonWrapped("Load Path"))
+            if (ImGuiEx.ButtonWrapped("載入路徑"))
             {
                 Plugin.LoadPath();
                 ClearAll();
             }
-            ImGuiComponents.HelpMarker("Loads the path");
+            ImGuiComponents.HelpMarker("載入目前指定的路徑檔案。");
             ImGui.SameLine(0, 5);
             using(ImRaii.Enabled())
             {
                 using (ImRaii.Disabled(Plugin.PathFile.IsNullOrEmpty()))
                 {
-                    if (ImGuiEx.ButtonWrapped("Open File"))
+                    if (ImGuiEx.ButtonWrapped("開啟檔案"))
                         Process.Start("explorer",  Plugin.PathFile ?? string.Empty);
                 }
             }
@@ -275,7 +275,7 @@ namespace AutoDuty.Windows
                         if (uint.TryParse(_arguments[0], out var dataId))
                             AddAction();
                         else
-                            ShowPopup("Error", $"{_action.Name}'s must be uint's corresponding to the objects DataId", true);
+                            ShowPopup("錯誤", $"{_action.Name} 的參數必須是對應遊戲物件 DataId 的無號整數。", true);
                     }
                     else
                     {
@@ -284,11 +284,11 @@ namespace AutoDuty.Windows
                 }
             }
             ImGui.SameLine();
-            ImGuiEx.CheckboxWrapped("Dont Move", ref _dontMove);
+            ImGuiEx.CheckboxWrapped("不要移動", ref _dontMove);
             ImGui.SameLine();
             using (ImRaii.Disabled(_buildListSelected < 0))
             {
-                if (ImGuiEx.ButtonWrapped("Delete"))
+                if (ImGuiEx.ButtonWrapped("刪除"))
                 {
                     _deleteItem = true;
                     _deleteItemIndex = _buildListSelected;
@@ -296,14 +296,14 @@ namespace AutoDuty.Windows
                 }
 
                 ImGui.SameLine();
-                if (ImGuiEx.ButtonWrapped("Copy to Clipboard"))
+                if (ImGuiEx.ButtonWrapped("複製到剪貼簿"))
                     ImGui.SetClipboardText(_action?.ToCustomString());
                 if (Plugin.isDev)
                 {
                     ImGui.SameLine();
                     using (ImRaii.Disabled(!Player.Available || _action == null))
                     {
-                        if (ImGuiEx.ButtonWrapped("Teleport To"))
+                        if (ImGuiEx.ButtonWrapped("傳送到此處"))
                             Player.GameObject->SetPosition(_action!.Position.X, _action.Position.Y, _action.Position.Z);
                     }
                 }
@@ -447,7 +447,7 @@ namespace AutoDuty.Windows
                                 _buildListSelected = item.Index;
                                 _showAddActionUI   = true;
                                 _dropdownSelected  = ("", "", "");
-                                _addActionButton   = "Modify";
+                                _addActionButton   = "修改";
                                 _action            = item.Value;
                                 _actionTag         = item.Value.Tag;
                             }
@@ -514,7 +514,7 @@ namespace AutoDuty.Windows
                     }
                 }
                 else
-                    ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), "You must enter a dungeon to Build a Path");
+                    ImGuiEx.TextWrapped(new Vector4(0, 1, 0, 1), "必須進入副本後才能建立路徑。");
             }
             catch (Exception ex) { Svc.Log.Error(ex.ToString()); }
             if (_scrollBottom)
@@ -536,7 +536,7 @@ namespace AutoDuty.Windows
             _dontMove = false;
             _showAddActionUI = false;
             _noArgument = false;
-            _addActionButton = "Add";
+            _addActionButton = "新增";
             _buildListSelected = -1;
             _action = null;
             _comment = false;

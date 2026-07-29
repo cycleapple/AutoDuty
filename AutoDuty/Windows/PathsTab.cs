@@ -60,19 +60,19 @@ namespace AutoDuty.Windows
             ImGui.SameLine();
             using (var d = ImRaii.Disabled(_selectedDutyPath == null))
             {
-                if (ImGuiEx.ButtonWrapped("Open File"))
+                if (ImGuiEx.ButtonWrapped("開啟檔案"))
                     Process.Start("explorer", _selectedDutyPath?.FilePath ?? string.Empty);
             }
             ImGui.SameLine();
             ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(0, 1, 1, 1));
-            if (ImGuiEx.CheckboxWrapped($"Do not overwrite on update", ref _checked))
+            if (ImGuiEx.CheckboxWrapped("更新時不要覆寫", ref _checked))
                 CheckBoxOnChange();
 
             ImGui.PopStyleColor();
             ImGui.SameLine();
             using (ImRaii.Disabled(!Plugin.Configuration.PathSelectionsByPath.Any(kvp => kvp.Value.Any())))
             {
-                if (ImGuiEx.ButtonWrapped("Clear all cached jobs"))
+                if (ImGuiEx.ButtonWrapped("清除所有職業選擇快取"))
                 {
                     _selectedDutyPath = null;
                     Plugin.Configuration.PathSelectionsByPath.Clear();
@@ -81,7 +81,7 @@ namespace AutoDuty.Windows
             }
 
             bool anyHeaderOpen = headers.Values.Any(b => b);
-            if (ImGuiEx.ButtonWrapped(anyHeaderOpen ? "Collapse All" : "Reveal All"))
+            if (ImGuiEx.ButtonWrapped(anyHeaderOpen ? "全部收合" : "全部展開"))
             {
                 foreach (uint key in headers.Keys)
                     headers[key] = !anyHeaderOpen;
@@ -89,7 +89,7 @@ namespace AutoDuty.Windows
 
             using (ImRaii.Disabled(Patcher.PatcherState == ActionState.Running))
             {
-                if (ImGuiEx.ButtonWrapped("Download Paths"))
+                if (ImGuiEx.ButtonWrapped("下載路徑"))
                     Patcher.Patch(ImGui.IsMouseClicked(ImGuiMouseButton.Right));
             }
             bool showJobSelection = _selectedDutyPath is { container.Paths.Count: > 1 };
