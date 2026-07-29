@@ -93,7 +93,9 @@ namespace AutoDuty.Managers
 
             public void AddPath(string name)
             {
-                this.Paths.Add(new DutyPath(name, this));
+                DutyPath path = new(name, this);
+                if (path.TryLoad())
+                    this.Paths.Add(path);
             }
         }
 
@@ -139,46 +141,52 @@ namespace AutoDuty.Managers
             {
                 get
                 {
-                    if (pathFile == null)
-                    {
-                        try
-                        {
-                            RevivalFound = false;
-                            W2WFound     = false;
-
-                            string json;
-
-                            using (StreamReader streamReader = new(FilePath, Encoding.UTF8))
-                                json = streamReader.ReadToEnd();
-
-
-                            pathFile = JsonConvert.DeserializeObject<PathFile>(json, ConfigurationMain.JsonSerializerSettings);
-
-                            RevivalFound = PathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.Revival));
-                            W2WFound     = PathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.W2W));
-                            
-                            /*
-                            if (this.pathFile.Meta.LastUpdatedVersion < 189)
-                            {
-
-                                pathFile.Meta.Changelog.Add(new PathFileChangelogEntry
-                                                            {
-                                                                Version = 189,
-                                                                Change  = "Adjusted tags to string values"
-                                                            });
-
-                                json = JsonSerializer.Serialize(pathFile, BuildTab.jsonSerializerOptions);
-                                File.WriteAllText(FilePath, json);
-                            }*/
-                        }
-                        catch (Exception ex)
-                        {
-                            Svc.Log.Info($"{FilePath} is not a valid duty path: {ex}");
-                            DictionaryPaths[id].Paths.Remove(this);
-                        }
-                    }
+                    if (!TryLoad())
+                        throw new InvalidDataException($"{FilePath} is not a valid duty path.");
 
                     return pathFile!;
+                }
+            }
+
+            public bool TryLoad()
+            {
+                if (pathFile != null)
+                    return true;
+
+                try
+                {
+                    RevivalFound = false;
+                    W2WFound     = false;
+
+                    string json;
+
+                    using (StreamReader streamReader = new(FilePath, Encoding.UTF8))
+                        json = streamReader.ReadToEnd();
+
+                    pathFile = JsonConvert.DeserializeObject<PathFile>(json, ConfigurationMain.JsonSerializerSettings)
+                        ?? throw new InvalidDataException("Duty path deserialized to null.");
+
+                    // Older or manually edited path files can explicitly contain
+                    // null sections, bypassing the property initializers.
+                    pathFile.Actions ??= [];
+                    pathFile.Meta ??= new PathFileMetaData
+                    {
+                        CreatedAt = Plugin.Version,
+                        Changelog = [],
+                        Notes = []
+                    };
+                    pathFile.Meta.Changelog ??= [];
+                    pathFile.Meta.Notes ??= [];
+
+                    RevivalFound = pathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.Revival));
+                    W2WFound     = pathFile.Actions.Any(x => x.Tag.HasFlag(ActionTag.W2W));
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    pathFile = null;
+                    Svc.Log.Info($"{FilePath} is not a valid duty path and will be skipped: {ex}");
+                    return false;
                 }
             }
 
