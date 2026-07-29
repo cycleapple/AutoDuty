@@ -1,8 +1,8 @@
 {
   "Author": "Herculezz, erdelf",
   "Name": "AutoDuty",
-  "Punchline": "AutoDuty",
-  "Description": "A plugin to run dungeons for you with Trust, Duty Support, Squadrons, Variants, and Regular, Requires BossMod, vnavmesh and a Rotation Plugin (Wrath Combo, BossMod AutoRotation, or RotationSolverReborn)",
+  "Punchline": "自動執行副本任務",
+  "Description": "使用親信戰友、任務支援器、冒險者分隊、特殊迷宮或一般配對自動執行副本。需要 BossMod、vnavmesh 與循環插件（Wrath Combo、BossMod AutoRotation 或 Rotation Solver Reborn）。",
   "InternalName": "AutoDuty",
   "DalamudApiLevel": "13",
   "MinimumDalamudVersion": "13.0.0.0",

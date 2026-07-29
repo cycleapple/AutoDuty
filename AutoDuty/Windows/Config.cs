@@ -59,7 +59,7 @@ public class ConfigurationMain
 
     [JsonProperty]
     private string activeProfileName = CONFIGNAME_BARE;
-    
+
     public  string ActiveProfileName => this.activeProfileName;
 
     public bool Initialized { get; private set; } = false;
@@ -262,7 +262,7 @@ public class ConfigurationMain
                                 }
                             }, 500, false);
                         }
-                        
+
                     }
                 }
                 catch (Exception ex)
@@ -421,7 +421,7 @@ public class ConfigurationMain
 
             private static void SendToAllClients(string message)
             {
-                foreach (StreamString? ss in streams) 
+                foreach (StreamString? ss in streams)
                     ss?.WriteString(message);
             }
 
@@ -506,8 +506,8 @@ public class ConfigurationMain
                                                                                                             {
                                                                                                                 Utf8String inviterName = InfoProxyPartyInvite.Instance()->InviterName;
 
-                                                                                                                
-                                                                                                                if (InfoProxyPartyInvite.Instance()->InviterWorldId != 0 && 
+
+                                                                                                                if (InfoProxyPartyInvite.Instance()->InviterWorldId != 0 &&
                                                                                                                     UniversalParty.Length <= 1 &&
                                                                                                                     GenericHelpers.TryGetAddonByName("SelectYesno", out AtkUnitBase* addonSelectYesno) &&
                                                                                                                     GenericHelpers.IsAddonReady(addonSelectYesno))
@@ -644,7 +644,7 @@ public class ConfigurationMain
     }
 
     public IEnumerable<string> ConfigNames => this.profileByName.Keys;
-     
+
     public ProfileData GetCurrentProfile
     {
         get
@@ -746,10 +746,10 @@ public class ConfigurationMain
         });
     }
 
-    public void CreateNewProfile() => 
+    public void CreateNewProfile() =>
         this.CreateProfile("Profile" + (this.profileByName.Count - 1).ToString(CultureInfo.InvariantCulture));
 
-    public void CreateProfile(string name) => 
+    public void CreateProfile(string name) =>
         this.CreateProfile(name, new Configuration());
 
     public void CreateProfile(string name, Configuration config)
@@ -811,7 +811,7 @@ public class ConfigurationMain
         return true;
     }
 
-    public ProfileData? GetProfile(string name) => 
+    public ProfileData? GetProfile(string name) =>
         this.profileByName.GetValueOrDefault(name);
 
     public void SetCharacterDefault()
@@ -866,7 +866,7 @@ public class ConfigurationMain
                                                                        Formatting           = Formatting.Indented,
                                                                        DefaultValueHandling = DefaultValueHandling.Include,
                                                                        Converters           = [new StringEnumConverter(new DefaultNamingStrategy())],
-                                                                       
+
                                                                    };
 }
 
@@ -882,10 +882,10 @@ public class AutoDutySerializationFactory : DefaultSerializationFactory, ISerial
 {
     public override string DefaultConfigFileName { get; } = "AutoDutyConfig.json";
 
-    public new string Serialize(object config) => 
+    public new string Serialize(object config) =>
         base.Serialize(config);
 
-    public override byte[] SerializeAsBin(object config) => 
+    public override byte[] SerializeAsBin(object config) =>
         Encoding.UTF8.GetBytes(this.Serialize(config));
 }
 
@@ -936,14 +936,14 @@ public class Configuration
     }
 
 
-    
+
     public bool Unsynced                       = false;
     public bool HideUnavailableDuties          = false;
     public bool PreferTrustOverSupportLeveling = false;
 
     public bool ShowMainWindowOnStartup = false;
 
-    
+
     #region OverlayConfig
     internal bool showOverlay = true;
     public bool ShowOverlay
@@ -960,7 +960,7 @@ public class Configuration
     public bool HideOverlayWhenStopped
     {
         get => hideOverlayWhenStopped;
-        set 
+        set
         {
             hideOverlayWhenStopped = value;
             if (Plugin.Overlay != null)
@@ -973,7 +973,7 @@ public class Configuration
     public bool LockOverlay
     {
         get => lockOverlay;
-        set 
+        set
         {
             lockOverlay = value;
             if (value)
@@ -1299,7 +1299,7 @@ public static class ConfigTab
 
         //Start of Profile Selection
         ImGui.AlignTextToFramePadding();
-        ImGui.Text("Currently selected profile: ");
+        ImGui.Text("目前選取的設定檔：");
         ImGui.SameLine();
         if (ConfigurationMain.Instance.ActiveProfileName == ConfigurationMain.CONFIGNAME_BARE)
             ImGuiHelper.DrawIcon(FontAwesomeIcon.Lock);
@@ -1319,7 +1319,7 @@ public static class ConfigTab
                         ImGuiHelper.DrawIcon(FontAwesomeIcon.CheckCircle);
 
                     float textX = ImGui.GetCursorPosX();
-                        
+
                     ImGui.SetCursorPosX(selectableX);
                     ImGui.SetItemAllowOverlap();
                     if (ImGui.Selectable($"###{key}ConfigSelectable", key == ConfigurationMain.Instance.ActiveProfileName))
@@ -1346,16 +1346,16 @@ public static class ConfigTab
             ImGui.SetNextWindowSize(new Vector2(textSize.X + 200, textSize.Y + 120) * ImGuiHelpers.GlobalScale);
             if (ImGui.BeginPopupModal($"##RenameProfile", ref open, ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoMove))
             {
-                ImGuiHelper.CenterNextElement(ImGui.CalcTextSize("New Profile Name").X);
-                ImGui.Text("New Profile Name");
+                ImGuiHelper.CenterNextElement(ImGui.CalcTextSize("新設定檔名稱").X);
+                ImGui.Text("新設定檔名稱");
                 ImGui.NewLine();
                 ImGui.SameLine(50);
                 ImGui.SetNextItemWidth((textSize.X + 100) * ImGuiHelpers.GlobalScale);
 
                 ImGui.InputText("##RenameProfileInput", ref profileRenameInput, 100);
                 ImGui.Spacing();
-                ImGuiHelper.CenterNextElement(ImGui.CalcTextSize("Change Profile Name").X);
-                if (ImGui.Button("Change Profile Name"))
+                ImGuiHelper.CenterNextElement(ImGui.CalcTextSize("變更設定檔名稱").X);
+                if (ImGui.Button("變更設定檔名稱"))
                 {
                     if (ConfigurationMain.Instance.RenameCurrentProfile(profileRenameInput))
                     {
@@ -1375,7 +1375,7 @@ public static class ConfigTab
         if (ImGuiComponents.IconButton(FontAwesomeIcon.Plus))
             ConfigurationMain.Instance.CreateNewProfile();
         if (ImGui.IsItemHovered())
-            ImGui.SetTooltip("Create new Profile");
+            ImGui.SetTooltip("建立新設定檔");
 
         ImGui.SameLine(0, 15f);
         using (ImRaii.Disabled(bareProfile))
@@ -1386,13 +1386,13 @@ public static class ConfigTab
             }
 
         if (ImGui.IsMouseHoveringRect(ImGui.GetItemRectMin(), ImGui.GetItemRectMax()))
-            ImGui.SetTooltip("Rename Profile");
+            ImGui.SetTooltip("重新命名設定檔");
 
         ImGui.SameLine();
         if (ImGuiComponents.IconButton(FontAwesomeIcon.Copy))
             ConfigurationMain.Instance.DuplicateCurrentProfile();
         if (ImGui.IsItemHovered())
-            ImGui.SetTooltip("Duplicate Profile");
+            ImGui.SetTooltip("複製設定檔");
 
         ImGui.SameLine();
         using (ImRaii.Disabled(ImGui.GetIO().KeyCtrl ? ConfigurationMain.Instance.GetCurrentProfile.CIDs.Contains(Player.CID) != ImGui.GetIO().KeyShift : ConfigurationMain.Instance.DefaultConfigName == ConfigurationMain.Instance.ActiveProfileName))
@@ -1423,8 +1423,8 @@ public static class ConfigTab
         ImGui.Spacing();
         ImGui.Separator();
         ImGui.PushStyleVar(ImGuiStyleVar.SelectableTextAlign, new Vector2(0.5f, 0.5f));
-        var overlayHeader = ImGui.Selectable("Window & Overlay Settings", overlayHeaderSelected, ImGuiSelectableFlags.DontClosePopups);
-        ImGui.PopStyleVar();      
+        var overlayHeader = ImGui.Selectable("視窗與浮動介面設定", overlayHeaderSelected, ImGuiSelectableFlags.DontClosePopups);
+        ImGui.PopStyleVar();
         if (ImGui.IsItemHovered())
             ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
         if (overlayHeader)
@@ -1432,7 +1432,7 @@ public static class ConfigTab
 
         if (overlayHeaderSelected == true)
         {
-            if (ImGui.Checkbox("Show Overlay", ref Configuration.showOverlay))
+            if (ImGui.Checkbox("顯示浮動介面", ref Configuration.showOverlay))
             {
                 Configuration.ShowOverlay = Configuration.showOverlay;
                 Configuration.Save();
@@ -1444,58 +1444,58 @@ public static class ConfigTab
                 ImGui.Columns(2, "##OverlayColumns", false);
 
                 //ImGui.SameLine(0, 53);
-                if (ImGui.Checkbox("Hide When Stopped", ref Configuration.hideOverlayWhenStopped))
+                if (ImGui.Checkbox("停止時隱藏", ref Configuration.hideOverlayWhenStopped))
                 {
                     Configuration.HideOverlayWhenStopped = Configuration.hideOverlayWhenStopped;
                     Configuration.Save();
                 }
                 ImGui.NextColumn();
-                if (ImGui.Checkbox("Lock Overlay", ref Configuration.lockOverlay))
+                if (ImGui.Checkbox("鎖定浮動介面", ref Configuration.lockOverlay))
                 {
                     Configuration.LockOverlay = Configuration.lockOverlay;
                     Configuration.Save();
                 }
                 ImGui.NextColumn();
                 //ImGui.SameLine(0, 57);
-                
-                if (ImGui.Checkbox("Show Duty/Loops Text", ref Configuration.ShowDutyLoopText))
+
+                if (ImGui.Checkbox("顯示副本／循環次數文字", ref Configuration.ShowDutyLoopText))
                     Configuration.Save();
                 ImGui.NextColumn();
-                if (ImGui.Checkbox("Use Transparent BG", ref Configuration.overlayNoBG))
+                if (ImGui.Checkbox("使用透明背景", ref Configuration.overlayNoBG))
                 {
                     Configuration.OverlayNoBG = Configuration.overlayNoBG;
                     Configuration.Save();
                 }
                 ImGui.NextColumn();
-                if (ImGui.Checkbox("Show AD Action Text", ref Configuration.ShowActionText))
+                if (ImGui.Checkbox("顯示 AutoDuty 動作文字", ref Configuration.ShowActionText))
                     Configuration.Save();
                 ImGui.NextColumn();
-                if (ImGui.Checkbox("Anchor at Bottom", ref Configuration.OverlayAnchorBottom))
+                if (ImGui.Checkbox("固定於底部", ref Configuration.OverlayAnchorBottom))
                     Configuration.Save();
                 ImGui.NextColumn();
-                if (ImGui.Checkbox("Override Overlay Buttons", ref Configuration.OverrideOverlayButtons))
+                if (ImGui.Checkbox("自訂浮動介面按鈕", ref Configuration.OverrideOverlayButtons))
                     Configuration.Save();
                 ImGuiComponents.HelpMarker("Overlay buttons by default are enabled if their config is enabled\nThis will allow you to chose which buttons are enabled");
                 if (Configuration.OverrideOverlayButtons)
                 {
                     ImGui.Indent();
                     ImGui.Columns(3, "##OverlayButtonColumns", false);
-                    if (ImGui.Checkbox("Goto", ref Configuration.GotoButton))
+                    if (ImGui.Checkbox("前往", ref Configuration.GotoButton))
                         Configuration.Save();
                     ImGui.NextColumn();
                     if (ImGui.Checkbox("Turnin", ref Configuration.TurninButton))
                         Configuration.Save();
                     ImGui.NextColumn();
-                    if (ImGui.Checkbox("Desynth", ref Configuration.DesynthButton))
+                    if (ImGui.Checkbox("分解", ref Configuration.DesynthButton))
                         Configuration.Save();
                     ImGui.NextColumn();
-                    if (ImGui.Checkbox("Extract", ref Configuration.ExtractButton))
+                    if (ImGui.Checkbox("精製魔晶石", ref Configuration.ExtractButton))
                         Configuration.Save();
                     ImGui.NextColumn();
-                    if (ImGui.Checkbox("Repair", ref Configuration.RepairButton))
+                    if (ImGui.Checkbox("修理", ref Configuration.RepairButton))
                         Configuration.Save();
                     ImGui.NextColumn();
-                    if (ImGui.Checkbox("Equip", ref Configuration.EquipButton))
+                    if (ImGui.Checkbox("裝備", ref Configuration.EquipButton))
                         Configuration.Save();
                     ImGui.NextColumn();
                     if (ImGui.Checkbox("Coffer", ref Configuration.CofferButton))
@@ -1508,12 +1508,12 @@ public static class ConfigTab
                 ImGui.Unindent();
             }
             ImGui.Columns(1);
-            if (ImGui.Checkbox("Show Main Window on Startup", ref Configuration.ShowMainWindowOnStartup))
+            if (ImGui.Checkbox("啟動時顯示主視窗", ref Configuration.ShowMainWindowOnStartup))
                 Configuration.Save();
             ImGui.SameLine();
-            if (ImGui.Checkbox("Slider Inputs", ref Configuration.UseSliderInputs))
+            if (ImGui.Checkbox("使用滑桿輸入", ref Configuration.UseSliderInputs))
                 Configuration.Save();
-            
+
         }
 
         if (Plugin.isDev)
@@ -1533,7 +1533,7 @@ public static class ConfigTab
                 if (ImGui.Checkbox("Update Paths on startup", ref ConfigurationMain.Instance.updatePathsOnStartup))
                     Configuration.Save();
 
-                if (ImGui.Button("Print mod list")) 
+                if (ImGui.Button("Print mod list"))
                     Svc.Log.Info(string.Join("\n", PluginInterface.InstalledPlugins.Where(pl => pl.IsLoaded).GroupBy(pl => pl.Manifest.InstalledFromUrl).OrderByDescending(g => g.Count()).Select(g => g.Key+"\n\t"+string.Join("\n\t", g.Select(pl => pl.Name)))));
                 unsafe
                 {
@@ -1578,7 +1578,7 @@ public static class ConfigTab
                                 ImGui.NextColumn();
                                 ImGui.Text("Completed");
                                 ImGui.NextColumn();
-                                
+
                                 ImGui.NextColumn();
                                 ImGui.Text("Name");
                                 ImGui.NextColumn();
@@ -1707,7 +1707,7 @@ public static class ConfigTab
 
 
 
-                if (ImGui.Button("Turn on rotation")) 
+                if (ImGui.Button("Turn on rotation"))
                     Plugin.SetRotationPluginSettings(true, ignoreConfig: true, ignoreTimer: true);
 
                 ImGui.SameLine();
@@ -1773,7 +1773,7 @@ public static class ConfigTab
         ImGui.Spacing();
         ImGui.Separator();
         ImGui.PushStyleVar(ImGuiStyleVar.SelectableTextAlign, new Vector2(0.5f, 0.5f));
-        var dutyConfigHeader = ImGui.Selectable("Duty Config Settings", dutyConfigHeaderSelected, ImGuiSelectableFlags.DontClosePopups);
+        var dutyConfigHeader = ImGui.Selectable("副本執行設定", dutyConfigHeaderSelected, ImGuiSelectableFlags.DontClosePopups);
         ImGui.PopStyleVar();
         if (ImGui.IsItemHovered())
             ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
@@ -1783,15 +1783,15 @@ public static class ConfigTab
         if (dutyConfigHeaderSelected == true)
         {
             ImGui.Columns(2, "##DutyConfigHeaderColumns");
-            if (ImGui.Checkbox("Auto Leave Duty in last loop", ref Configuration.AutoExitDuty))
+            if (ImGui.Checkbox("最後一次循環後自動離開副本", ref Configuration.AutoExitDuty))
                 Configuration.Save();
             ImGuiComponents.HelpMarker("Will automatically exit the dungeon upon completion of the path.");
             ImGui.NextColumn();
-            if (ImGui.Checkbox("Block leaving duty until it's complete", ref Configuration.OnlyExitWhenDutyDone))
+            if (ImGui.Checkbox("副本完成前禁止離開", ref Configuration.OnlyExitWhenDutyDone))
                 Configuration.Save();
             //ImGuiComponents.HelpMarker("Blocks leaving dungeon before duty is completed");
             ImGui.Columns(1);
-            if (ImGui.Checkbox("Auto Manage Rotation Plugin State", ref Configuration.AutoManageRotationPluginState))
+            if (ImGui.Checkbox("自動管理循環插件狀態", ref Configuration.AutoManageRotationPluginState))
                 Configuration.Save();
             ImGuiComponents.HelpMarker("Autoduty will enable the Rotation Plugin at the start of each duty\n*AutoDuty will try to use them in list order");
 
@@ -1842,7 +1842,7 @@ public static class ConfigTab
                         if (wrathSettingHeaderSelected)
                         {
                             bool wrath_AutoSetupJobs = Configuration.Wrath_AutoSetupJobs;
-                            if (ImGui.Checkbox("Auto setup jobs for autorotation", ref wrath_AutoSetupJobs))
+                            if (ImGui.Checkbox("自動設定職業的循環", ref wrath_AutoSetupJobs))
                             {
                                 Configuration.Wrath_AutoSetupJobs = wrath_AutoSetupJobs;
                                 Configuration.Save();
@@ -1851,7 +1851,7 @@ public static class ConfigTab
                             ImGuiComponents.HelpMarker("If this is not enabled and a job is not setup in Wrath Combo, AD will instead use RSR or bm AutoRotation");
 
                             ImGui.AlignTextToFramePadding();
-                            ImGui.Text("Targeting | Tank: ");
+                            ImGui.Text("目標選擇｜防護職：");
                             ImGui.SameLine(0, 5);
                             ImGui.PushItemWidth(150 * ImGuiHelpers.GlobalScale);
                             if (ImGui.BeginCombo("##ConfigWrathTargetingTank", Configuration.Wrath_TargetingTank.ToCustomString()))
@@ -1872,7 +1872,7 @@ public static class ConfigTab
                             }
 
                             ImGui.AlignTextToFramePadding();
-                            ImGui.Text("Targeting | Non-Tank: ");
+                            ImGui.Text("目標選擇｜非防護職：");
                             ImGui.SameLine(0, 5);
                             ImGui.PushItemWidth(150 * ImGuiHelpers.GlobalScale);
                             if (ImGui.BeginCombo("##ConfigWrathTargetingNonTank", Configuration.Wrath_TargetingNonTank.ToCustomString()))
@@ -1912,7 +1912,7 @@ public static class ConfigTab
                         if (rsrSettingHeaderSelected)
                         {
                             ImGui.AlignTextToFramePadding();
-                            ImGui.Text("Engage Settings: ");
+                            ImGui.Text("接戰設定：");
                             ImGui.SameLine(0, 5);
                             ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X * ImGuiHelpers.GlobalScale);
                             if (ImGui.BeginCombo("##ConfigRSREngage", RSR_IPCSubscriber.GetHostileTypeDescription(Configuration.RSR_TargetHostileType)))
@@ -1930,7 +1930,7 @@ public static class ConfigTab
 
 
                             ImGui.AlignTextToFramePadding();
-                            ImGui.Text("Targeting | Tank: ");
+                            ImGui.Text("目標選擇｜防護職：");
                             ImGui.SameLine(0, 5);
                             ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X * ImGuiHelpers.GlobalScale);
                             if (ImGui.BeginCombo("##ConfigRSRTargetTank", Configuration.RSR_TargetingTypeTank.ToCustomString()))
@@ -1947,7 +1947,7 @@ public static class ConfigTab
                             }
 
                             ImGui.AlignTextToFramePadding();
-                            ImGui.Text("Targeting | Non-Tank: ");
+                            ImGui.Text("目標選擇｜非防護職：");
                             ImGui.SameLine(0, 5);
                             ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X * ImGuiHelpers.GlobalScale);
                             if (ImGui.BeginCombo("##ConfigRSRTargetNonTank", Configuration.RSR_TargetingTypeNonTank.ToCustomString()))
@@ -1971,7 +1971,7 @@ public static class ConfigTab
                 }
             }
 
-            if (ImGui.Checkbox("Auto Manage BossMod AI Settings", ref Configuration.autoManageBossModAISettings))
+            if (ImGui.Checkbox("自動管理 BossMod AI 設定", ref Configuration.autoManageBossModAISettings))
                 Configuration.Save();
             ImGuiComponents.HelpMarker("Autoduty will enable BMAI and any options you configure at the start of each duty.");
 
@@ -1985,15 +1985,15 @@ public static class ConfigTab
                     ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
                 if (bmaiSettingHeader)
                     bmaiSettingHeaderSelected = !bmaiSettingHeaderSelected;
-            
+
                 if (bmaiSettingHeaderSelected == true)
                 {
-                    if (ImGui.Button("Update Presets"))
+                    if (ImGui.Button("更新預設組合"))
                     {
                         BossMod_IPCSubscriber.RefreshPreset("AutoDuty", Resources.AutoDutyPreset);
                         BossMod_IPCSubscriber.RefreshPreset("AutoDuty Passive", Resources.AutoDutyPassivePreset);
                     }
-                    if (ImGui.Checkbox("Update Presets automatically", ref Configuration.BM_UpdatePresetsAutomatically)) 
+                    if (ImGui.Checkbox("自動更新預設組合", ref Configuration.BM_UpdatePresetsAutomatically))
                         Configuration.Save();
                     if (ImGui.Checkbox("Set Max Distance To Target Based on Player Role", ref Configuration.maxDistanceToTargetRoleBased))
                     {
@@ -2041,7 +2041,7 @@ public static class ConfigTab
                         ImGui.SameLine(0, 10);
                         if (ImGui.Button(Configuration.PositionalEnum.ToCustomString()))
                             ImGui.OpenPopup("PositionalPopup");
-            
+
                         if (ImGui.BeginPopup("PositionalPopup"))
                         {
                             foreach (Positional positional in Enum.GetValues(typeof(Positional)))
@@ -2055,7 +2055,7 @@ public static class ConfigTab
                             ImGui.EndPopup();
                         }
                     }
-                    if (ImGui.Button("Use Default BMAI Settings"))
+                    if (ImGui.Button("使用預設 BMAI 設定"))
                     {
                         Configuration.maxDistanceToTargetRoleBased = true;
                         Configuration.positionalRoleBased = true;
@@ -2067,17 +2067,17 @@ public static class ConfigTab
                 }
                 ImGui.Unindent();
             }
-            if (ImGui.Checkbox("Auto Manage Vnav Align Camera", ref Configuration.AutoManageVnavAlignCamera))
+            if (ImGui.Checkbox("自動管理 vnavmesh 鏡頭對齊", ref Configuration.AutoManageVnavAlignCamera))
                 Configuration.Save();
             ImGuiComponents.HelpMarker("Autoduty will enable AlignCamera in VNav at the start of each duty, and disable it when done if it was not set.");
 
-            if (ImGui.Checkbox("Loot Treasure Coffers", ref Configuration.LootTreasure))
+            if (ImGui.Checkbox("拾取寶箱", ref Configuration.LootTreasure))
                 Configuration.Save();
 
             if (Configuration.LootTreasure)
             {
                 ImGui.Indent();
-                ImGui.Text("Select Method: ");
+                ImGui.Text("選擇方式：");
                 ImGui.SameLine(0, 5);
                 ImGui.PushItemWidth(200 * ImGuiHelpers.GlobalScale);
                 if (ImGui.BeginCombo("##ConfigLootMethod", Configuration.LootMethodEnum.ToCustomString()))
@@ -2095,8 +2095,8 @@ public static class ConfigTab
                     }
                     ImGui.EndCombo();
                 }
-                
-                if (ImGui.Checkbox("Loot Boss Treasure Only", ref Configuration.LootBossTreasureOnly))
+
+                if (ImGui.Checkbox("只拾取首領寶箱", ref Configuration.LootBossTreasureOnly))
                         Configuration.Save();
 
                 ImGuiComponents.HelpMarker("AutoDuty will walk around non-boss chests, and only loot boss chests.\nNot all paths may accomodate.");
@@ -2104,13 +2104,13 @@ public static class ConfigTab
                 ImGui.Unindent();
             }
             ImGui.PushItemWidth(150 * ImGuiHelpers.GlobalScale);
-            if (ImGui.InputInt("Minimum time before declared stuck (in ms)", ref Configuration.MinStuckTime, 10, 100))
+            if (ImGui.InputInt("判定卡住前的最短時間（毫秒）", ref Configuration.MinStuckTime, 10, 100))
             {
                 Configuration.MinStuckTime = Math.Max(250, Configuration.MinStuckTime);
                 Configuration.Save();
             }
 
-            if (ImGui.Checkbox("Rebuild Navmesh when stuck", ref Configuration.RebuildNavmeshOnStuck))
+            if (ImGui.Checkbox("卡住時重建導航網格", ref Configuration.RebuildNavmeshOnStuck))
                 Configuration.Save();
 
             if (Configuration.RebuildNavmeshOnStuck)
@@ -2124,7 +2124,7 @@ public static class ConfigTab
                 }
             }
 
-            if(ImGui.Checkbox("Draw next steps in Path", ref Configuration.PathDrawEnabled))
+            if(ImGui.Checkbox("繪製路徑的後續步驟", ref Configuration.PathDrawEnabled))
                 Configuration.Save();
             ImGui.PopItemWidth();
             if (Configuration.PathDrawEnabled)
@@ -2162,13 +2162,13 @@ public static class ConfigTab
                 ImGui.EndListBox();
             }
 
-            if (ImGui.Checkbox("Override Party Validation", ref Configuration.OverridePartyValidation))
+            if (ImGui.Checkbox("略過隊伍驗證", ref Configuration.OverridePartyValidation))
                 Configuration.Save();
             ImGuiComponents.HelpMarker("AutoDuty will ignore your party makeup when queueing for duties\nThis is for Multi-Boxing Only\n*AutoDuty is not recommended to be used with other players*");
 
 
             ImGui.PushStyleVar(ImGuiStyleVar.SelectableTextAlign, new Vector2(0.5f, 0.5f));
-            var advModeHeader = ImGui.Selectable("Advanced Config Options", advModeHeaderSelected, ImGuiSelectableFlags.DontClosePopups);
+            var advModeHeader = ImGui.Selectable("進階設定", advModeHeaderSelected, ImGuiSelectableFlags.DontClosePopups);
             ImGui.PopStyleVar();
             if (ImGui.IsItemHovered())
                 ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
@@ -2177,15 +2177,15 @@ public static class ConfigTab
 
             if (advModeHeaderSelected == true)
             {
-                if (ImGui.Checkbox("Using Alternative Rotation Plugin", ref Configuration.UsingAlternativeRotationPlugin))
+                if (ImGui.Checkbox("使用其他循環插件", ref Configuration.UsingAlternativeRotationPlugin))
                     Configuration.Save();
                 ImGuiComponents.HelpMarker("You are deciding to use a plugin other than Wrath Combo, Rotation Solver or BossMod AutoRotation.");
 
-                if (ImGui.Checkbox("Using Alternative Movement Plugin", ref Configuration.UsingAlternativeMovementPlugin))
+                if (ImGui.Checkbox("使用其他移動插件", ref Configuration.UsingAlternativeMovementPlugin))
                     Configuration.Save();
                 ImGuiComponents.HelpMarker("You are deciding to use a plugin other than Vnavmesh.");
 
-                if (ImGui.Checkbox("Using Alternative Boss Plugin", ref Configuration.UsingAlternativeBossPlugin))
+                if (ImGui.Checkbox("使用其他首領機制插件", ref Configuration.UsingAlternativeBossPlugin))
                     Configuration.Save();
                 ImGuiComponents.HelpMarker("You are deciding to use a plugin other than BossMod.");
             }
@@ -2195,7 +2195,7 @@ public static class ConfigTab
         ImGui.Spacing();
         ImGui.Separator();
         ImGui.PushStyleVar(ImGuiStyleVar.SelectableTextAlign, new Vector2(0.5f, 0.5f));
-        var preLoopHeader = ImGui.Selectable("Pre-Loop Initialization Settings", preLoopHeaderSelected, ImGuiSelectableFlags.DontClosePopups);
+        var preLoopHeader = ImGui.Selectable("循環開始前設定", preLoopHeaderSelected, ImGuiSelectableFlags.DontClosePopups);
         ImGui.PopStyleVar();
         if (ImGui.IsItemHovered())
             ImGui.SetMouseCursor(ImGuiMouseCursor.Hand);
@@ -2204,7 +2204,7 @@ public static class ConfigTab
 
         if (preLoopHeaderSelected == true)
         {
-            if (ImGui.Checkbox("Enable###PreLoopEnable", ref Configuration.EnablePreLoopActions))
+            if (ImGui.Checkbox("啟用###PreLoopEnable", ref Configuration.EnablePreLoopActions))
                 Configuration.Save();
 
             using (ImRaii.Disabled(!Configuration.EnablePreLoopActions))
@@ -2241,7 +2241,7 @@ public static class ConfigTab
 
                     if (Configuration is { RetireMode: true, RetireLocationEnum: RetireLocation.Personal_Home })
                     {
-                        if (ImGui.Button("Add Current Position"))
+                        if (ImGui.Button("加入目前位置"))
                         {
                             Configuration.PersonalHomeEntrancePath.Add(Player.Position);
                             Configuration.Save();
@@ -2276,7 +2276,7 @@ public static class ConfigTab
 
                     if (Configuration is { RetireMode: true, RetireLocationEnum: RetireLocation.FC_Estate })
                     {
-                        if (ImGui.Button("Add Current Position"))
+                        if (ImGui.Button("加入目前位置"))
                         {
                             Configuration.FCEstateEntrancePath.Add(Player.Position);
                             Configuration.Save();
@@ -2611,7 +2611,7 @@ public static class ConfigTab
                         ImGui.SameLine();
 
                         RaptureGearsetModule* module = RaptureGearsetModule.Instance();
-                        
+
                         if (Configuration.AutoOpenCoffersGearset != null && !module->IsValidGearset((int) Configuration.AutoOpenCoffersGearset))
                         {
                             Configuration.AutoOpenCoffersGearset = null;
@@ -2671,7 +2671,7 @@ public static class ConfigTab
                                     Configuration.Save();
                                 }
                             }
-                            
+
                             if (!ImGui.BeginListBox("##CofferBlackList", new System.Numerics.Vector2(ImGui.GetContentRegionAvail().X, (ImGui.GetTextLineHeightWithSpacing() * Configuration.AutoOpenCoffersBlacklist.Count) + 5))) return;
 
                             foreach (var item in Configuration.AutoOpenCoffersBlacklist)
@@ -2685,14 +2685,14 @@ public static class ConfigTab
                             }
                             ImGui.EndListBox();
                         }
-                        
+
                         ImGui.Unindent();
                     }
                 }
 
                 using (ImGuiHelper.RequiresPlugin(ExternalPlugin.AutoRetainer, "DiscardConfig", inline: true))
                 {
-                    if (ImGui.Checkbox("Discard Items", ref Configuration.DiscardItems)) 
+                    if (ImGui.Checkbox("Discard Items", ref Configuration.DiscardItems))
                         Configuration.Save();
                 }
                 if (!AutoRetainer_IPCSubscriber.IsEnabled)
@@ -2737,7 +2737,7 @@ public static class ConfigTab
                         ImGui.Unindent();
                     }
 
-                    if (ImGui.Checkbox($"Protect Gearsets##Desynth{nameof(Configuration.AutoDesynthNoGearset)}", ref Configuration.AutoDesynthNoGearset)) 
+                    if (ImGui.Checkbox($"Protect Gearsets##Desynth{nameof(Configuration.AutoDesynthNoGearset)}", ref Configuration.AutoDesynthNoGearset))
                         Configuration.Save();
 
                     if (ImGui.CollapsingHeader("Desynth Categories"))
@@ -2799,7 +2799,7 @@ public static class ConfigTab
                             }
                             ImGui.PopItemWidth();
                         }
-                        if (ImGui.Checkbox("Use GC Aetheryte Ticket", ref Configuration.AutoGCTurninUseTicket)) 
+                        if (ImGui.Checkbox("Use GC Aetheryte Ticket", ref Configuration.AutoGCTurninUseTicket))
                             Configuration.Save();
                         ImGui.Unindent();
                     }
@@ -2851,7 +2851,7 @@ public static class ConfigTab
                 }
 
                 ImGui.Columns(1);
-                
+
 
                 using (ImGuiHelper.RequiresPlugin(ExternalPlugin.AutoRetainer, "AR", inline: true))
                 {
@@ -3106,7 +3106,7 @@ public static class ConfigTab
                     }
                 }
                 ImGui.PopItemWidth();
-                    
+
                 ImGui.SameLine(0, 5);
                 using (ImRaii.Disabled(curCommand.IsNullOrEmpty() || curCommand[0] != '/'))
                 {
@@ -3116,7 +3116,7 @@ public static class ConfigTab
                         Configuration.Save();
                     }
                 }
-                if (!ImGui.BeginListBox($"##CommandList{checkbox}", new System.Numerics.Vector2(ImGui.GetContentRegionAvail().X, (ImGui.GetTextLineHeightWithSpacing() * commands.Count) + 5))) 
+                if (!ImGui.BeginListBox($"##CommandList{checkbox}", new System.Numerics.Vector2(ImGui.GetContentRegionAvail().X, (ImGui.GetTextLineHeightWithSpacing() * commands.Count) + 5)))
                     return;
 
                 var removeItem = false;

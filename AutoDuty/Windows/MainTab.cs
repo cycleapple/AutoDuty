@@ -1,4 +1,4 @@
-﻿using AutoDuty.Helpers;
+using AutoDuty.Helpers;
 using AutoDuty.IPC;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
@@ -36,7 +36,7 @@ namespace AutoDuty.Windows
         internal static void Draw()
         {
             MainWindow.CurrentTabName = "Main";
-            
+
             var dutyMode = Plugin.Configuration.DutyModeEnum;
             var levelingMode = Plugin.LevelingModeEnum;
 
@@ -44,15 +44,15 @@ namespace AutoDuty.Windows
             {
                 // Set the maximum search to 10 characters
                 int inputMaxLength = 10;
-                
+
                 // Calculate the X width of the maximum amount of search characters
                 Vector2 _characterWidth = ImGui.CalcTextSize("W");
                 float inputMaxWidth = ImGui.CalcTextSize("W").X * inputMaxLength;
-                
+
                 // Set the width of the search box to the calculated width
                 ImGui.SetNextItemWidth(inputMaxWidth);
-                
-                ImGui.InputTextWithHint("##search", "Search duties...", ref _searchText, inputMaxLength);
+
+                ImGui.InputTextWithHint("##search", "搜尋副本…", ref _searchText, inputMaxLength);
 
                 // Apply filtering based on the search text
                 if (_searchText.Length > 0)
@@ -79,12 +79,12 @@ namespace AutoDuty.Windows
                         Dictionary<string, JobWithRole>? pathSelection    = null;
                         JobWithRole                      curJob = Svc.ClientState.LocalPlayer.GetJob().JobToJobWithRole();
                         using (ImRaii.Disabled(curPath <= 0 ||
-                                               !Plugin.Configuration.PathSelectionsByPath.ContainsKey(Plugin.CurrentTerritoryContent.TerritoryType) || 
+                                               !Plugin.Configuration.PathSelectionsByPath.ContainsKey(Plugin.CurrentTerritoryContent.TerritoryType) ||
                                                !(pathSelection = Plugin.Configuration.PathSelectionsByPath[Plugin.CurrentTerritoryContent.TerritoryType]).Any(kvp => kvp.Value.HasJob(Svc.ClientState.LocalPlayer.GetJob()))))
                         {
-                            if (ImGui.Button("Clear Saved Path"))
+                            if (ImGui.Button("清除已儲存路徑"))
                             {
-                                foreach (KeyValuePair<string, JobWithRole> keyValuePair in pathSelection) 
+                                foreach (KeyValuePair<string, JobWithRole> keyValuePair in pathSelection)
                                     pathSelection[keyValuePair.Key] &= ~curJob;
 
                                 PathSelectionHelper.RebuildDefaultPaths(Plugin.CurrentTerritoryContent.TerritoryType);
@@ -105,8 +105,8 @@ namespace AutoDuty.Windows
                                     PathSelectionHelper.AddPathSelectionEntry(Plugin.CurrentTerritoryContent!.TerritoryType);
                                     Dictionary<string, JobWithRole> pathJobs = Plugin.Configuration.PathSelectionsByPath[Plugin.CurrentTerritoryContent.TerritoryType]!;
                                     pathJobs.TryAdd(path.Value.FileName, JobWithRole.None);
-                                    
-                                    foreach (string jobsKey in pathJobs.Keys) 
+
+                                    foreach (string jobsKey in pathJobs.Keys)
                                         pathJobs[jobsKey] &= ~curJob;
 
                                     pathJobs[path.Value.FileName] |= curJob;
@@ -123,10 +123,10 @@ namespace AutoDuty.Windows
                             ImGui.EndCombo();
                         }
                         ImGui.PopItemWidth();
-                        
+
                         if (ImGui.IsItemHovered() && !curPaths[curPath].PathFile.Meta.Notes.All(x => x.IsNullOrEmpty()))
                             ImGui.SetTooltip(string.Join("\n", curPaths[curPath].PathFile.Meta.Notes));
-                        
+
                     }
                 }
             }
@@ -146,7 +146,7 @@ namespace AutoDuty.Windows
                         ImGui.ProgressBar(progress, new Vector2(200, 0));
                     }
                     else
-                        ImGui.Text($"{Plugin.CurrentTerritoryContent.Name} Mesh: Loaded Path: {(ContentPathsManager.DictionaryPaths.ContainsKey(Plugin.CurrentTerritoryContent.TerritoryType) ? "Loaded" : "None")}");
+                        ImGui.Text($"{Plugin.CurrentTerritoryContent.Name} Mesh: Loaded Path: {(ContentPathsManager.DictionaryPaths.ContainsKey(Plugin.CurrentTerritoryContent.TerritoryType) ? "已載入" : "None")}");
 
                     ImGui.Separator();
                     ImGui.Spacing();
@@ -154,7 +154,7 @@ namespace AutoDuty.Windows
                     if (dutyMode == DutyMode.Trust && Plugin.CurrentTerritoryContent != null)
                     {
                         ImGui.Columns(3);
-                        using (ImRaii.Disabled()) 
+                        using (ImRaii.Disabled())
                             DrawTrustMembers(Plugin.CurrentTerritoryContent);
                         ImGui.Columns(1);
                         ImGui.Spacing();
@@ -169,7 +169,7 @@ namespace AutoDuty.Windows
                         {
                             if (Plugin.Stage == 0)
                             {
-                                if (ImGui.Button("Start"))
+                                if (ImGui.Button("開始"))
                                 {
                                     Plugin.LoadPath();
                                     _currentStepIndex = -1;
@@ -224,7 +224,7 @@ namespace AutoDuty.Windows
                             if (!BossMod_IPCSubscriber.IsEnabled && !Plugin.Configuration.UsingAlternativeBossPlugin)
                                 ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty Requires BossMod plugin to be Installed and Loaded\nPlease add 3rd party repo:\nhttps://puni.sh/api/repository/veyn");
                             if (!Wrath_IPCSubscriber.IsEnabled && !RSR_IPCSubscriber.IsEnabled && !BossMod_IPCSubscriber.IsEnabled && !Plugin.Configuration.UsingAlternativeRotationPlugin)
-                                ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty Requires a Rotation plugin to be Installed and Loaded (Either Wrath Combo, Rotation Solver Reborn, or BossMod AutoRotation)");
+                                ImGui.TextColored(new Vector4(255, 0, 0, 1), "AutoDuty 需要安裝並載入循環插件（Wrath Combo、Rotation Solver Reborn 或 BossMod AutoRotation）。");
                         }
                         ImGui.EndListBox();
                     }
@@ -234,12 +234,12 @@ namespace AutoDuty.Windows
             {
                 if (!Plugin.States.HasFlag(PluginState.Looping) && !Plugin.Overlay.IsOpen)
                     MainWindow.GotoAndActions();
-                
+
 
                 using (ImRaii.Disabled(Plugin.States.HasFlag(PluginState.Looping)))
                 {
                     ImGui.AlignTextToFramePadding();
-                    ImGui.TextColored(ImGuiHelper.StateGoodColor, "Select Mode: ");
+                    ImGui.TextColored(ImGuiHelper.StateGoodColor, "選擇模式：");
                     ImGui.SameLine(0);
                     ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
                     if (ImGui.BeginCombo("##AutoDutyModeEnum", Plugin.Configuration.AutoDutyModeEnum.ToCustomString()))
@@ -261,7 +261,7 @@ namespace AutoDuty.Windows
                 {
                     if (!Plugin.States.HasFlag(PluginState.Looping))
                     {
-                        if (ImGui.Button("Run"))
+                        if (ImGui.Button("執行"))
                         {
                             if (Plugin.Configuration.DutyModeEnum == DutyMode.None)
                                 MainWindow.ShowPopup("Error", "You must select a version\nof the dungeon to run");
@@ -282,7 +282,7 @@ namespace AutoDuty.Windows
                 }
 
 
-                
+
                 using (ImRaii.Disabled(Plugin.States.HasFlag(PluginState.Looping)))
                 {
                     switch (Plugin.Configuration.AutoDutyModeEnum)
@@ -298,7 +298,7 @@ namespace AutoDuty.Windows
                             }
 
                             ImGui.AlignTextToFramePadding();
-                            ImGui.TextColored(Plugin.Configuration.DutyModeEnum == DutyMode.None ? ImGuiHelper.StateBadColor : ImGuiHelper.StateGoodColor, "Select Duty Mode: ");
+                            ImGui.TextColored(Plugin.Configuration.DutyModeEnum == DutyMode.None ? ImGuiHelper.StateBadColor : ImGuiHelper.StateGoodColor, "選擇副本模式：");
                             ImGui.SameLine(0);
                             ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
                             if (ImGui.BeginCombo("##DutyModeEnum", Plugin.Configuration.DutyModeEnum.ToCustomString()))
@@ -320,7 +320,7 @@ namespace AutoDuty.Windows
                                 if (Plugin.Configuration.DutyModeEnum == DutyMode.Support || Plugin.Configuration.DutyModeEnum == DutyMode.Trust)
                                 {
                                     ImGui.AlignTextToFramePadding();
-                                    ImGui.TextColored(Plugin.LevelingModeEnum == LevelingMode.None ? ImGuiHelper.StateBadColor : ImGuiHelper.StateGoodColor, "Select Leveling Mode: ");
+                                    ImGui.TextColored(Plugin.LevelingModeEnum == LevelingMode.None ? ImGuiHelper.StateBadColor : ImGuiHelper.StateGoodColor, "選擇練等模式：");
                                     ImGui.SameLine(0);
 
                                     ImGuiComponents.HelpMarker("Leveling Mode will queue you for the most CONSISTENT dungeon considering your lvl + Ilvl.\n" +
@@ -369,7 +369,7 @@ namespace AutoDuty.Windows
 
                                 if (Plugin.Configuration.DutyModeEnum == DutyMode.Support && levelingMode == LevelingMode.Support)
                                 {
-                                    if (ImGui.Checkbox("Prefer Trust over Support Leveling", ref Plugin.Configuration.PreferTrustOverSupportLeveling))
+                                    if (ImGui.Checkbox("練等時優先使用親信戰友而非任務支援器", ref Plugin.Configuration.PreferTrustOverSupportLeveling))
                                         Plugin.Configuration.Save();
                                 }
 
@@ -406,7 +406,7 @@ namespace AutoDuty.Windows
                                         if (DutySelected.Content.TrustMembers.Count == 7)
                                             ImGui.NextColumn();
 
-                                        if (ImGui.Button("Refresh", new Vector2(ImGui.GetContentRegionAvail().X, 0)))
+                                        if (ImGui.Button("重新整理", new Vector2(ImGui.GetContentRegionAvail().X, 0)))
                                         {
                                             if (InventoryHelper.CurrentItemLevel < 370)
                                                 Plugin.LevelingModeEnum = LevelingMode.None;
@@ -420,7 +420,7 @@ namespace AutoDuty.Windows
                                         ImGui.NextColumn();
                                         ImGui.Columns(1);
                                     }
-                                    else if (ImGui.Button("Refresh trust member levels"))
+                                    else if (ImGui.Button("更新親信戰友等級"))
                                     {
                                         if (InventoryHelper.CurrentItemLevel < 370)
                                             Plugin.LevelingModeEnum = LevelingMode.None;
@@ -437,7 +437,7 @@ namespace AutoDuty.Windows
 
                                 DrawSearchBar();
                                 ImGui.SameLine();
-                                if (ImGui.Checkbox("Hide Unavailable Duties", ref Plugin.Configuration.HideUnavailableDuties))
+                                if (ImGui.Checkbox("隱藏無法進入的副本", ref Plugin.Configuration.HideUnavailableDuties))
                                     Plugin.Configuration.Save();
                                 if (Plugin.Configuration.DutyModeEnum is DutyMode.Regular or DutyMode.Trial or DutyMode.Raid)
                                 {
@@ -455,7 +455,7 @@ namespace AutoDuty.Windows
                             Plugin.Configuration.AutoDutyModeEnum = AutoDutyMode.Looping;
                             break;
                     }
-                    
+
                     ushort ilvl = InventoryHelper.CurrentItemLevel;
                     if (!ImGui.BeginListBox("##DutyList", new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y))) return;
 
@@ -549,7 +549,7 @@ namespace AutoDuty.Windows
 
                                         ImGui.AlignTextToFramePadding();
                                         ImGui.SetItemAllowOverlap();
-                                        if (ImGui.Selectable($"{i}:##Playlist{i+1}Entry", Plugin.PlaylistIndex == i, ImGuiSelectableFlags.AllowItemOverlap)) 
+                                        if (ImGui.Selectable($"{i}:##Playlist{i+1}Entry", Plugin.PlaylistIndex == i, ImGuiSelectableFlags.AllowItemOverlap))
                                             Plugin.PlaylistIndex = i;
                                         ImGui.SameLine(0, 10);
 
@@ -563,7 +563,7 @@ namespace AutoDuty.Windows
 
 
                                         ImGui.PushItemWidth(80f.Scale());
-                                        if (ImGui.InputInt($"##Playlist{i}Count", ref entry.count, step: 1, stepFast: 2, @"%dx")) 
+                                        if (ImGui.InputInt($"##Playlist{i}Count", ref entry.count, step: 1, stepFast: 2, @"%dx"))
                                             entry.count = Math.Max(1, entry.count);
 
                                         ImGui.PopItemWidth();
@@ -579,14 +579,14 @@ namespace AutoDuty.Windows
 
                                                 using (ImRaii.PushColor(ImGuiCol.Text, ImGuiHelper.StateGoodColor, entryContent.DutyModes.HasFlag(mode)))
                                                 {
-                                                    if (ImGui.Selectable(mode.ToCustomString(), entry.DutyMode == mode)) 
+                                                    if (ImGui.Selectable(mode.ToCustomString(), entry.DutyMode == mode))
                                                         entry.DutyMode = mode;
                                                 }
                                             }
 
                                             ImGui.EndCombo();
                                         }
-                                        
+
                                         ImGui.PopItemWidth();
                                         ImGui.SameLine();
                                         ImGui.PushItemWidth((entryContainer.Paths.Count > 1 ? (ImGui.GetContentRegionAvail().X - 107f.Scale()) / 2f : ImGui.GetContentRegionAvail().X - 100f.Scale()));
@@ -619,13 +619,13 @@ namespace AutoDuty.Windows
                                             if (ImGui.BeginCombo($"##Playlist{i}PathSelection", entryContainer.Paths.First(dp => dp.FileName == entry.path).Name))
                                             {
                                                 foreach (ContentPathsManager.DutyPath path in entryContainer.Paths)
-                                                    if(ImGui.Selectable(path.Name, path.FileName == entry.path)) 
+                                                    if(ImGui.Selectable(path.Name, path.FileName == entry.path))
                                                         entry.path = path.FileName;
 
                                                 ImGui.EndCombo();
                                             }
                                         }
-                                    
+
 
                                         ImGui.PopItemWidth();
                                         ImGui.SameLine();
@@ -656,7 +656,7 @@ namespace AutoDuty.Windows
                                             Plugin.PlaylistCurrent.RemoveAt(i);
                                     }
 
-                                    if (ImGuiComponents.IconButton("PlaylistAdd", FontAwesomeIcon.Plus)) 
+                                    if (ImGuiComponents.IconButton("PlaylistAdd", FontAwesomeIcon.Plus))
                                         Plugin.PlaylistCurrent.Add(new PlaylistEntry { DutyMode = Plugin.PlaylistCurrent.Any() ? Plugin.PlaylistCurrent.Last().DutyMode : DutyMode.Support });
 
                                     break;

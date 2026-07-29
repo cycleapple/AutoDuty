@@ -1,4 +1,4 @@
-﻿using AutoDuty.Helpers;
+using AutoDuty.Helpers;
 using Dalamud.Bindings.ImGui;
 using ECommons.ImGuiMethods;
 using System.Diagnostics;
@@ -14,7 +14,7 @@ namespace AutoDuty.Windows
         static string infoUrl = "https://docs.google.com/spreadsheets/d/151RlpqRcCpiD_VbQn6Duf-u-S71EP7d0mx3j1PDNoNA";
         static string gitIssueUrl = "https://github.com/ffxivcode/AutoDuty/issues";
         static string punishDiscordUrl = "https://discord.com/channels/1001823907193552978/1236757595738476725";
-        
+
         private static Configuration Configuration = Plugin.Configuration;
 
         public static void Draw()
@@ -24,14 +24,14 @@ namespace AutoDuty.Windows
             ImGui.NewLine();
             ImGuiEx.TextWrapped("For assistance with general setup for both AutoDuty and it's dependencies, be sure to check out the setup guide below for more information:");
             ImGui.NewLine();
-            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("Information and Setup").X) / 2);
-            if (ImGui.Button("Information and Setup"))
+            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("資訊與設定").X) / 2);
+            if (ImGui.Button("資訊與設定"))
                 Process.Start("explorer.exe", infoUrl);
             ImGui.NewLine();
             ImGuiEx.TextWrapped("The above guide also has information on the status of each path, such as Path maturity, module maturity, and general consistency of each path. You can also review additional notes or considerations, that may need to be made on your part for successful looping. For requests, issues, or contributions to AD, please use the AutoDuty Github to open an issue:");
             ImGui.NewLine();
-            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("GitHub Issues").X) / 2);
-            if (ImGui.Button("GitHub Issues"))
+            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("GitHub 問題回報").X) / 2);
+            if (ImGui.Button("GitHub 問題回報"))
                 Process.Start("explorer.exe", gitIssueUrl);
             ImGui.NewLine();
             ImGuiEx.TextCentered("For everything else, join the discord!");
@@ -46,12 +46,12 @@ namespace AutoDuty.Windows
 
             void PluginInstallLine(ExternalPlugin plugin, string message)
             {
-                bool isReady = plugin == ExternalPlugin.BossMod ? 
-                                   BossMod_IPCSubscriber.IsEnabled : 
+                bool isReady = plugin == ExternalPlugin.BossMod ?
+                                   BossMod_IPCSubscriber.IsEnabled :
                                    IPCSubscriber_Common.IsReady(plugin.GetExternalPluginData().name);
-                
+
                 if(!isReady)
-                    if (ImGui.Button($"Install##InstallExternalPlugin_{plugin}_{id++}"))
+                    if (ImGui.Button($"安裝##InstallExternalPlugin_{plugin}_{id++}"))
                         PluginInstaller.InstallPlugin(plugin);
 
                 ImGui.NextColumn();
@@ -64,8 +64,8 @@ namespace AutoDuty.Windows
                 ImGui.NextColumn();
             }
 
-            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("Required Plugins").X) / 2);
-            ImGui.Text("Required Plugins");
+            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("必要插件").X) / 2);
+            ImGui.Text("必要插件");
 
             ImGui.Columns(3, "PluginInstallerRequired", false);
             ImGui.SetColumnWidth(0, 60);
@@ -76,11 +76,11 @@ namespace AutoDuty.Windows
 
             ImGui.Columns(1);
             ImGui.NewLine();
-            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("Combat Plugins").X) / 2);
-            ImGui.Text("Combat Plugins");
+            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("戰鬥插件").X) / 2);
+            ImGui.Text("戰鬥插件");
 
             ImGui.Indent(65f);
-            ImGui.TextColored(EzColor.Cyan, "Hotly debated, pick your favorite. You can configure it in the config");
+            ImGui.TextColored(EzColor.Cyan, "請依個人偏好選擇，並可在設定中進一步調整。");
             ImGui.Unindent(65f);
 
             ImGui.Columns(3, "PluginInstallerCombat", false);
@@ -93,8 +93,8 @@ namespace AutoDuty.Windows
 
             ImGui.Columns(1);
             ImGui.NewLine();
-            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("Recommended Plugins").X) / 2);
-            ImGui.Text("Recommended Plugins");
+            ImGui.SetCursorPosX((ImGui.GetContentRegionAvail().X - ImGui.CalcTextSize("建議插件").X) / 2);
+            ImGui.Text("建議插件");
             ImGui.NewLine();
             ImGui.Columns(3, "PluginInstallerRecommended", false);
             ImGui.SetColumnWidth(0, 60);

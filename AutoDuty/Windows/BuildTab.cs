@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface.Utility.Raii;
+using Dalamud.Interface.Utility.Raii;
 using ECommons.DalamudServices;
 using ECommons;
 using Dalamud.Bindings.ImGui;
@@ -79,7 +79,7 @@ namespace AutoDuty.Windows
         private static void DrawPathElements()
         {
             using var d = ImRaii.Disabled(!Plugin.InDungeon || Plugin.Stage > 0 || !Player.Available);
-            ImGui.Text($"Build Path: ({Svc.ClientState.TerritoryType}) {(ContentHelper.DictionaryContent.TryGetValue(Svc.ClientState.TerritoryType, out var content) ? content.Name : TerritoryName.GetTerritoryName(Svc.ClientState.TerritoryType))}");
+            ImGui.Text($"建立路徑：({Svc.ClientState.TerritoryType}) {(ContentHelper.DictionaryContent.TryGetValue(Svc.ClientState.TerritoryType, out var content) ? content.Name : TerritoryName.GetTerritoryName(Svc.ClientState.TerritoryType))}");
 
             string idText = $"({Svc.ClientState.TerritoryType}) ";
             ImGui.Text(idText);
@@ -94,7 +94,7 @@ namespace AutoDuty.Windows
 
             ImGui.SameLine();
             ImGui.Text($".json");
-            ImGui.Text("Changelog:");
+            ImGui.Text("變更紀錄：");
             ImGui.SameLine();
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
             ImGui.InputText("##Changelog", ref _changelog, 200);
@@ -102,7 +102,7 @@ namespace AutoDuty.Windows
 
         private static void DrawButtons()
         {
-            if (ImGui.Button("Add POS"))
+            if (ImGui.Button("加入座標"))
             {
                 _scrollBottom = true;
                 Plugin.Actions.Add(new PathAction { Name = "MoveTo", Position = Player.Position });
@@ -311,7 +311,7 @@ namespace AutoDuty.Windows
             if (!(_noArgument || _comment))
             {
                 ImGui.AlignTextToFramePadding();
-                ImGui.TextColored(_argumentTextColor, "Arguments:");
+                ImGui.TextColored(_argumentTextColor, "參數：");
                 ImGui.SameLine();
                 ImGui.TextColored(_argumentTextColor, _argumentHint);
                 ImGui.SameLine();
@@ -327,14 +327,14 @@ namespace AutoDuty.Windows
 
                     using (ImRaii.Disabled(i <= 0))
                     {
-                        if (ImGui.Button("↑##MoveUp")) 
+                        if (ImGui.Button("↑##MoveUp"))
                             (_arguments[i], _arguments[i - 1]) = (_arguments[i - 1], _arguments[i]);
                     }
 
                     ImGui.SameLine();
                     using (ImRaii.Disabled(i >= _arguments.Count - 1))
                     {
-                        if (ImGui.Button("↓##MoveDown")) 
+                        if (ImGui.Button("↓##MoveDown"))
                             (_arguments[i], _arguments[i + 1]) = (_arguments[i + 1], _arguments[i]);
                     }
 
@@ -356,7 +356,7 @@ namespace AutoDuty.Windows
 
                     ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
                     string tempArgument = _arguments[i];
-                    if (ImGui.InputText($"##Argument{i}", ref tempArgument, 200)) 
+                    if (ImGui.InputText($"##Argument{i}", ref tempArgument, 200))
                         _arguments[i] = tempArgument;
                     ImGui.PopID();
                 }
@@ -366,7 +366,7 @@ namespace AutoDuty.Windows
 
             if (!_comment)
             {
-                if (ImGui.Button("Position:"))
+                if (ImGui.Button("位置："))
                     _position = (_position - Player.Position).LengthSquared() <= 0.1f ? Vector3.Zero : Player.Position;
 
                 ImGui.SameLine();
@@ -381,14 +381,14 @@ namespace AutoDuty.Windows
 
             }
             ImGui.AlignTextToFramePadding();
-            ImGui.Text("Note:");
+            ImGui.Text("備註：");
             ImGui.SameLine();
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
             ImGui.InputText("##Note", ref _note, 200);
             using (ImRaii.Disabled(_action == null || _action.Tag.HasAnyFlag(ActionTag.Comment, ActionTag.Revival, ActionTag.Treasure)))
             {
                 ImGui.AlignTextToFramePadding();
-                ImGui.Text("Tag:");
+                ImGui.Text("標籤：");
                 ImGui.SameLine();
                 ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
                 if (ImGui.BeginCombo("##TagSelection", _actionTag.HasAnyFlag(ActionTag.None, ActionTag.Synced, ActionTag.Unsynced) ? _actionTag.ToCustomString() : ActionTag.None.ToCustomString()))
@@ -465,7 +465,7 @@ namespace AutoDuty.Windows
                             _duplicateItemIndex = item.Index;
                         }
 
-                        if (ImGui.IsItemActive() && !ImGui.IsItemHovered() && !_dragDrop) 
+                        if (ImGui.IsItemActive() && !ImGui.IsItemHovered() && !_dragDrop)
                             _buildListSelected = item.Index;
 
                         if (_buildListSelected == item.Index && ImGui.IsMouseDown(ImGuiMouseButton.Left) && !_showAddActionUI)
@@ -581,7 +581,7 @@ namespace AutoDuty.Windows
                     if (MathF.Abs(ydiff) > 0.1f)
                     {
                         drawList.AddText(_position + Vector3.UnitY * MathF.Sign(ydiff), 0xFFFFFFFF, "Y-Diff: " + ydiff.ToString("F3", CultureInfo.CurrentCulture), 5f);
-                        
+
                         drawList.PathLineTo(_position);
                         drawList.PathLineTo(_position.WithY(playerY));
                         drawList.PathStroke(0xFFFFFFFF);

@@ -293,7 +293,7 @@ public sealed class AutoDuty : IDalamudPlugin
             ActiveHelper.InvokeAllHelpers();
 
             this.commands = [
-                (["config", "cfg"], "opens config window / modifies config", argsArray =>
+                (["config", "cfg"], "開啟設定視窗／修改設定", argsArray =>
                                                                              {
                                                                                  if (argsArray.Length < 2)
                                                                                      this.OpenConfigUI();
@@ -302,10 +302,10 @@ public sealed class AutoDuty : IDalamudPlugin
                                                                                  else
                                                                                      ConfigHelper.ModifyConfig(argsArray[1], argsArray[2..]);
                                                                              }),
-                (["start"], "starts autoduty when in a Duty", _ => this.StartNavigation()),
-                (["stop"], "stops everything", _ => Plugin.Stage = Stage.Stopped),
-                (["pause"], "pause route", _ => Plugin.Stage     = Stage.Paused),
-                (["resume"], "resume route", _ =>
+                (["start"], "在副本中啟動 AutoDuty", _ => this.StartNavigation()),
+                (["stop"], "停止所有動作", _ => Plugin.Stage = Stage.Stopped),
+                (["pause"], "暫停路徑", _ => Plugin.Stage     = Stage.Paused),
+                (["resume"], "繼續路徑", _ =>
                                              {
                                                  if (Plugin.Stage == Stage.Paused)
                                                  {
@@ -314,7 +314,7 @@ public sealed class AutoDuty : IDalamudPlugin
                                                      Plugin.States &= ~PluginState.Paused;
                                                  }
                                              }),
-                (["dataid"], "Logs and copies your target's dataid to clipboard", argsArray =>
+                (["dataid"], "記錄目前目標的 DataId 並複製到剪貼簿", argsArray =>
                                                                                   {
                                                                                       IGameObject? obj = null;
                                                                                       if (argsArray.Length == 2)
@@ -325,12 +325,12 @@ public sealed class AutoDuty : IDalamudPlugin
                                                                                       Svc.Log.Info($"{obj?.DataId}");
                                                                                       ImGui.SetClipboardText($"{obj?.DataId}");
                                                                                   }),
-                (["queue"], "queues duty", argsArray =>
+                (["queue"], "排入指定副本", argsArray =>
                                            {
                                                QueueHelper.Invoke(ContentHelper.DictionaryContent.FirstOrDefault(x => x.Value.Name!.Equals(string.Join(" ", argsArray).Replace("queue ", string.Empty), StringComparison.InvariantCultureIgnoreCase)).Value ?? null,
                                                                   this.Configuration.DutyModeEnum);
                                            }),
-                (["overlay"], "opens overlay", argsArray =>
+                (["overlay"], "開啟浮動介面", argsArray =>
                                                {
                                                    if (argsArray.Length == 1)
                                                    {
@@ -359,7 +359,7 @@ public sealed class AutoDuty : IDalamudPlugin
                                                        }
                                                    }
                                                }),
-                (["skipstep"], "skips the current step", _ =>
+                (["skipstep"], "略過目前步驟", _ =>
                                                          {
                                                              if (this.States.HasFlag(PluginState.Navigating))
                                                              {
@@ -367,8 +367,8 @@ public sealed class AutoDuty : IDalamudPlugin
                                                                  this.Stage = Stage.Reading_Path;
                                                              }
                                                          }),
-                (["movetoflag"], "moves to the flag map marker", _ => MapHelper.MoveToMapMarker()),
-                (["ttfull"], "opens packs, registers cards and sells the rest", _ =>
+                (["movetoflag"], "移動至地圖旗幟標記", _ => MapHelper.MoveToMapMarker()),
+                (["ttfull"], "開啟卡包、登錄卡片並出售剩餘卡片", _ =>
                                                                                 {
                                                                                     this.TaskManager.Enqueue(CofferHelper.Invoke);
                                                                                     this.TaskManager.Enqueue(() => CofferHelper.State == ActionState.None, 600000);
@@ -379,10 +379,10 @@ public sealed class AutoDuty : IDalamudPlugin
                                                                                     this.TaskManager.Enqueue(TripleTriadCardSellHelper.Invoke);
                                                                                     this.TaskManager.Enqueue(() => TripleTriadCardSellHelper.State == ActionState.None, 120000);
                                                                                 }),
-                (["run"], "starts auto duty in territory type specified", argsArray =>
+                (["run"], "在指定 TerritoryType 啟動 AutoDuty", argsArray =>
                                                                           {
-                                                                              const string failPreMessage  = "Run Error: Incorrect usage: ";
-                                                                              const string failPostMessage = "\nCorrect usage: /autoduty run DutyMode TerritoryTypeInteger LoopTimesInteger (optional)BareModeBool\nexample: /autoduty run Support 1036 10 true\nYou can get the TerritoryTypeInteger from /autoduty tt name of territory (will be logged and copied to clipboard)";
+                                                                              const string failPreMessage  = "執行錯誤：用法不正確：";
+                                                                              const string failPostMessage = "\n正確用法：/autoduty run DutyMode TerritoryTypeInteger LoopTimesInteger (optional)BareModeBool\n範例：/autoduty run Support 1036 10 true\n可使用 /autoduty tt 區域名稱取得 TerritoryTypeInteger（會寫入日誌並複製到剪貼簿）";
                                                                               if (argsArray.Length < 4)
                                                                               {
                                                                                   Svc.Log.Info($"{failPreMessage}Argument count must be at least 3, you inputted {argsArray.Length - 1}{failPostMessage}");

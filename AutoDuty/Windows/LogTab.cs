@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface.Colors;
+using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility.Raii;
 using ECommons;
 using ECommons.ImGuiMethods;
@@ -50,22 +50,22 @@ namespace AutoDuty.Windows
                 _whatHappenedInput = string.Empty;
             }
             ImGuiEx.Spacing();
-            if (ImGui.Checkbox("Auto Scroll", ref Plugin.Configuration.AutoScroll))
+            if (ImGui.Checkbox("自動捲動", ref Plugin.Configuration.AutoScroll))
                 Plugin.Configuration.Save();
             ImGui.SameLine();
             if (ImGuiEx.IconButton(Dalamud.Interface.FontAwesomeIcon.Trash))
                 Plugin.DalamudLogEntries.Clear();
             if (ImGui.IsItemHovered())
-                ImGui.SetTooltip("Clear log");
+                ImGui.SetTooltip("清除日誌");
             ImGui.SameLine();
             if (ImGuiEx.IconButton(Dalamud.Interface.FontAwesomeIcon.Copy))
                 ImGui.SetClipboardText(Plugin.DalamudLogEntries.SelectMulti(x => x.Message).ToList().ToCustomString("\n"));
             if (ImGui.IsItemHovered())
-                ImGui.SetTooltip("Copy entire log to clipboard");
+                ImGui.SetTooltip("將完整日誌複製到剪貼簿");
             ImGui.SameLine();
             using (ImRaii.Disabled(!_taskUserCode?.IsCompletedSuccessfully ?? false))
             {
-                if (ImGui.Button("Create Issue"))
+                if (ImGui.Button("建立問題回報"))
                 {
                     if (_pollResponse == null || _pollResponse.Access_Token.IsNullOrEmpty())
                     {
@@ -80,7 +80,7 @@ namespace AutoDuty.Windows
                     }
                     _popupOpen = true;
                     ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.None, new(0.5f, 0.5f));
-                    ImGui.OpenPopup($"Create Issue");
+                    ImGui.OpenPopup($"建立問題回報");
                 }
             }
             if (_pollResponse != null && !_pollResponse.Access_Token.IsNullOrEmpty())
@@ -88,8 +88,8 @@ namespace AutoDuty.Windows
                 ImGui.SetNextWindowSize(ImGui.GetMainViewport().Size);
                 ImGui.SetNextWindowPos(ImGui.GetMainViewport().GetCenter(), ImGuiCond.None, new(0.5f, 0.5f));
                 _imGuiWindowFlags = ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoMove;
-            }    
-            if (ImGui.BeginPopupModal($"Create Issue", ref _popupOpen, _imGuiWindowFlags))
+            }
+            if (ImGui.BeginPopupModal($"建立問題回報", ref _popupOpen, _imGuiWindowFlags))
             {
                 _clearedDataAfterPopupClose = false;
                 if (_pollResponse == null || _pollResponse.Access_Token.IsNullOrEmpty())
@@ -110,7 +110,7 @@ namespace AutoDuty.Windows
             }
 
             if (ImGui.IsItemHovered())
-                ImGui.SetTooltip("Filter log event level");
+                ImGui.SetTooltip("篩選日誌等級");
             ImGuiEx.Spacing();
 
             if (Plugin.Configuration.LogEventLevel < LogEventLevel.Information)
@@ -147,7 +147,7 @@ namespace AutoDuty.Windows
         };
 
         private static void DrawUserCodePopup()
-        { 
+        {
             if (_taskPollResponse != null && _userCode != null)
             {
                 if (_taskPollResponse.IsCompletedSuccessfully)
@@ -161,7 +161,7 @@ namespace AutoDuty.Windows
             else if (_taskUserCode != null && !_taskUserCode.IsCompletedSuccessfully)
             {
                 Vector4 vector4 = new(0, 1, 0, 1);
-                ImGui.TextColored(in vector4, "Waiting for Response from GitHub");
+                ImGui.TextColored(in vector4, "正在等待 GitHub 回應");
                 return;
             }
             else if (_taskUserCode != null && _taskUserCode.IsCompletedSuccessfully)
@@ -191,7 +191,7 @@ namespace AutoDuty.Windows
                 ImGui.Text(" to the ClipBoard and:");
                 using (ImRaii.Disabled(!_copied))
                 {
-                    if (ImGui.Button("Open GitHub###OpenUri"))
+                    if (ImGui.Button("開啟 GitHub###OpenUri"))
                     {
                         GenericHelpers.ShellStart($"https://github.com/login/device");
                         if (EzThrottler.Throttle("Polling", _userCode!.Interval * 1100))
@@ -208,7 +208,7 @@ namespace AutoDuty.Windows
         {
             if (_taskSubmitIssue != null && !_taskSubmitIssue.IsCompletedSuccessfully)
             {
-                ImGui.TextColored(ImGuiColors.HealerGreen, "Submitting Issue");
+                ImGui.TextColored(ImGuiColors.HealerGreen, "正在送出問題回報");
                 return;
             }
             else if (_taskSubmitIssue != null && _taskSubmitIssue.IsCompletedSuccessfully)
@@ -217,9 +217,9 @@ namespace AutoDuty.Windows
                 ImGui.CloseCurrentPopup();
                 return;
             }
-            ImGui.Text("Issue: Bug Report");
+            ImGui.Text("問題：錯誤回報");
             ImGui.Separator();
-            ImGui.Text("Add a title");
+            ImGui.Text("輸入標題");
             ImGui.SameLine(0, 5);
             ImGui.TextColored(ImGuiColors.DalamudRed, "*");
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
@@ -230,21 +230,21 @@ namespace AutoDuty.Windows
             if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
                 GenericHelpers.ShellStart("https://github.com/ffxivcode/AutoDuty/issues");
             ImGui.NewLine();
-            ImGui.TextWrapped("What Happened?");
-            ImGui.SameLine(0, 5);
-            ImGui.TextColored(ImGuiColors.DalamudRed, "*"); 
-            ImGui.TextWrapped("Also, what did you expect to happen? Please put any screenshots you can share here as well.");
-            ImGui.InputTextMultiline("##WhatHappenedInput", ref _whatHappenedInput, 500, new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y / 2.5f));
-            ImGui.NewLine();
-            ImGui.TextWrapped("Steps to reproduce the error");
+            ImGui.TextWrapped("發生了什麼？");
             ImGui.SameLine(0, 5);
             ImGui.TextColored(ImGuiColors.DalamudRed, "*");
-            ImGui.TextWrapped("List all of the steps we can take to reproduce this error.");
-            ImGui.InputTextMultiline("##ReproStepsInput", ref _reproStepsInput, 500, new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y - (ImGui.CalcTextSize("Submit Issue").Y * 3)));
+            ImGui.TextWrapped("也請說明預期應發生的結果，並附上可分享的畫面截圖。");
+            ImGui.InputTextMultiline("##WhatHappenedInput", ref _whatHappenedInput, 500, new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y / 2.5f));
+            ImGui.NewLine();
+            ImGui.TextWrapped("重現錯誤的步驟");
+            ImGui.SameLine(0, 5);
+            ImGui.TextColored(ImGuiColors.DalamudRed, "*");
+            ImGui.TextWrapped("請列出可用來重現此錯誤的所有步驟。");
+            ImGui.InputTextMultiline("##ReproStepsInput", ref _reproStepsInput, 500, new Vector2(ImGui.GetContentRegionAvail().X, ImGui.GetContentRegionAvail().Y - (ImGui.CalcTextSize("送出問題回報").Y * 3)));
             ImGui.NewLine();
             using (ImRaii.Disabled(_titleInput.Equals("[Bug] ") || _whatHappenedInput.IsNullOrEmpty() || _reproStepsInput.IsNullOrEmpty()))
             {
-                if (ImGui.Button("Submit Issue"))
+                if (ImGui.Button("送出問題回報"))
                 {
                     if (_pollResponse != null)
                     {

@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface.Utility.Raii;
+using Dalamud.Interface.Utility.Raii;
 using Dalamud.Bindings.ImGui;
 using static AutoDuty.AutoDuty;
 using System.Numerics;
@@ -50,11 +50,11 @@ namespace AutoDuty.Windows
         {
             if (MainWindow.CurrentTabName != "Paths")
                 MainWindow.CurrentTabName = "Paths";
-            ImGui.Text($"Path Files");
+            ImGui.Text($"路徑檔案");
             ImGui.Spacing();
             ImGui.Separator();
             ImGui.Spacing();
-            if (ImGui.Button("Open Folder"))
+            if (ImGui.Button("開啟資料夾"))
                 Process.Start("explorer.exe", Plugin.PathsDirectory.FullName);
 
             ImGui.SameLine();
@@ -83,13 +83,13 @@ namespace AutoDuty.Windows
             bool anyHeaderOpen = headers.Values.Any(b => b);
             if (ImGuiEx.ButtonWrapped(anyHeaderOpen ? "Collapse All" : "Reveal All"))
             {
-                foreach (uint key in headers.Keys) 
+                foreach (uint key in headers.Keys)
                     headers[key] = !anyHeaderOpen;
             }
 
             using (ImRaii.Disabled(Patcher.PatcherState == ActionState.Running))
             {
-                if (ImGuiEx.ButtonWrapped("Download Paths")) 
+                if (ImGuiEx.ButtonWrapped("Download Paths"))
                     Patcher.Patch(ImGui.IsMouseClicked(ImGuiMouseButton.Right));
             }
             bool showJobSelection = _selectedDutyPath is { container.Paths.Count: > 1 };
@@ -102,7 +102,7 @@ namespace AutoDuty.Windows
             ImGui.PushStyleVar(ImGuiStyleVar.WindowPadding,   style.FramePadding);
 
             float dutyListWidth = showJobSelection ? ImGui.GetContentRegionAvail().X/3*2 : ImGui.GetContentRegionAvail().X;
-            
+
             ImGui.BeginChild("##DutyList", new Vector2(dutyListWidth, 0), false,
                              ImGuiWindowFlags.HorizontalScrollbar | ImGuiWindowFlags.AlwaysVerticalScrollbar);
             try
@@ -178,7 +178,7 @@ namespace AutoDuty.Windows
                                 {
                                     if(jobs == JobWithRole.None)
                                         continue;
-                                    
+
                                     ImGui.SameLine(0, 15);
                                     ImGui.Spacing();
                                     ImGui.AlignTextToFramePadding();
@@ -222,7 +222,7 @@ namespace AutoDuty.Windows
 
                 ImGui.Text(_selectedDutyPath.Name);
 
-                if (ImGui.Button("Clear job selection for this Duty"))
+                if (ImGui.Button("清除此副本的職業選擇"))
                 {
                     ImGui.EndChild();
                     ImGui.EndTable();
@@ -244,7 +244,7 @@ namespace AutoDuty.Windows
                 PathSelectionHelper.AddPathSelectionEntry(_selectedDutyPath.container.id);
 
                 if (Plugin.Configuration.PathSelectionsByPath.TryGetValue(_selectedDutyPath.container.id, out Dictionary<string, JobWithRole>? pathSelections))
-                    if (pathSelections!.TryGetValue(_selectedDutyPath.FileName, out JobWithRole dutyRoles)) 
+                    if (pathSelections!.TryGetValue(_selectedDutyPath.FileName, out JobWithRole dutyRoles))
                         jwr = dutyRoles;
 
                 JobWithRole jwrCheck = jwr;
@@ -255,7 +255,7 @@ namespace AutoDuty.Windows
                 {
                     Dictionary<string, JobWithRole> pathJobConfigs = Plugin.Configuration.PathSelectionsByPath[_selectedDutyPath.container.id]!;
 
-                    foreach (string key in pathJobConfigs.Keys) 
+                    foreach (string key in pathJobConfigs.Keys)
                         pathJobConfigs[key] &= ~jwr;
 
                     pathJobConfigs[_selectedDutyPath.FileName] = jwr;

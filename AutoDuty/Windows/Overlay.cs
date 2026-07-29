@@ -34,7 +34,7 @@ public unsafe class Overlay : Window
     public override void PreDraw()
     {
         base.PreDraw();
-        
+
         int heightDiff = (this.lineHeight - this.lineHeightPrev);
 
         if (Plugin.Configuration.OverlayAnchorBottom && heightDiff != 0)
@@ -109,7 +109,7 @@ public unsafe class Overlay : Window
                                     if (Plugin.Stage == 0)
                                     {
                                         if (!Plugin.States.HasFlag(PluginState.Navigating) && !Plugin.States.HasFlag(PluginState.Looping))
-                                            if (ImGui.Button("Start"))
+                                            if (ImGui.Button("開始"))
                                             {
                                                 Plugin.LoadPath();
                                                 Plugin.Run(Svc.ClientState.TerritoryType);
