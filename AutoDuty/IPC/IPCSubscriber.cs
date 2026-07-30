@@ -653,32 +653,28 @@ namespace AutoDuty.IPC
             /// Stop the addon. Always remember to turn it off when it is not in use!
             /// </summary>
             [Description("Stop the addon. Always remember to turn it off when it is not in use!")]
-            Off,
+            Off = 0,
 
             /// <summary>
             /// Start the addon in Auto mode. When out of combat or when combat starts, switches the target according to the set condition.
             /// </summary>
             [Description("Start the addon in Auto mode. When out of combat or when combat starts, switches the target according to the set condition. " +
                          "\r\n Optionally: You can add the target type to the end of the command you want RSR to do. For example: /rotation Auto Big")]
-            Auto,
-
-            /// <summary>
-            /// Start the addon in Target-Only mode. RSR will auto-select targets per normal logic but will not perform any actions.
-            /// </summary>
-            [Description("Start in Target-Only mode. RSR will auto-select targets per normal logic but will not perform any actions.")]
-            TargetOnly,
+            Auto = 1,
 
             /// <summary>
             /// Start the addon in Manual mode. You need to choose the target manually. This will bypass any engage settings that you have set up and will start attacking immediately once something is targeted.
             /// </summary>
             [Description("Start the addon in Manual mode. You need to choose the target manually. This will bypass any engage settings that you have set up and will start attacking immediately once something is targeted.")]
-            Manual,
+            Manual = 2,
 
             /// <summary>
             /// 
             /// </summary>
             [Description("This mode is managed by the Autoduty plugin")]
-            AutoDuty,
+            // Keep these values synchronized with RotationSolver.Basic.Data.StateCommandType.
+            // RSR removed TargetOnly, so AutoDuty is 3 rather than the legacy value 4.
+            AutoDuty = 3,
         }
 
         /// <summary>
