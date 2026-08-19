@@ -66,6 +66,17 @@ public class MainWindow : Window, IDisposable
 
     internal static void LoopsConfig()
     {
+        if (Plugin.PlannerRunning && Plugin.CurrentPlannerItem is { } plannerItem)
+        {
+            var targetRuns = Math.Max(1, plannerItem.TargetRuns);
+            if ((Plugin.Configuration.UseSliderInputs && ImGui.SliderInt("執行次數", ref targetRuns, 1, 100)) || (!Plugin.Configuration.UseSliderInputs && ImGui.InputInt("執行次數", ref targetRuns, 1)))
+            {
+                plannerItem.TargetRuns = Math.Max(Math.Max(1, plannerItem.CompletedRuns), targetRuns);
+                Plugin.Configuration.Save();
+            }
+            return;
+        }
+
         if ((Plugin.Configuration.UseSliderInputs && ImGui.SliderInt("執行次數", ref Plugin.Configuration.LoopTimes, 0, 100)) || (!Plugin.Configuration.UseSliderInputs && ImGui.InputInt("執行次數", ref Plugin.Configuration.LoopTimes, 1)))
         {
             if (Plugin.Configuration.AutoDutyModeEnum == AutoDutyMode.Playlist)
@@ -496,6 +507,7 @@ public class MainWindow : Window, IDisposable
         ("Build", BuildTab.Draw, null, false),
         ("Paths", PathsTab.Draw, null, false),
         ("Config", ConfigTab.Draw, null, false),
+        ("排程器", PlannerTab.Draw, null, false),
         ("Info", InfoTab.Draw, null, false),
         ("Logs", LogTab.Draw, null, false),
         ("贊助 AutoDuty", KofiLink, ImGui.ColorConvertU32ToFloat4(ColorNormal), false)

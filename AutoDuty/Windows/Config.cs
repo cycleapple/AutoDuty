@@ -918,6 +918,11 @@ public class Configuration
 
 
     public int LoopTimes = 1;
+    public bool PlannerEnabled = false;
+    public bool PlannerRepeat = false;
+    public DutyMode PlannerDutyMode = DutyMode.Support;
+    public List<PlannerItem> PlannerItems = [];
+    public int PlannerCurrentIndex = 0;
     internal DutyMode dutyModeEnum = DutyMode.Support;
     public DutyMode DutyModeEnum
     {

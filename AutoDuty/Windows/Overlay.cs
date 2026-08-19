@@ -157,10 +157,10 @@ public unsafe class Overlay : Window
 
                                     if (Plugin.States.HasFlag(PluginState.Navigating) || Plugin.States.HasFlag(PluginState.Navigating))
                                         loopsText =
-                                            $"{(Plugin.CurrentTerritoryContent?.Name!.Length > 20 ? Plugin.CurrentTerritoryContent?.Name![..17] + "..." : Plugin.CurrentTerritoryContent?.Name)}{(Plugin.States.HasFlag(PluginState.Navigating) ? $"：第 {Plugin.CurrentLoop}／{Plugin.Configuration.LoopTimes} 次循環" : "")}";
+                                            $"{(Plugin.CurrentTerritoryContent?.Name!.Length > 20 ? Plugin.CurrentTerritoryContent?.Name![..17] + "..." : Plugin.CurrentTerritoryContent?.Name)}{(Plugin.States.HasFlag(PluginState.Navigating) ? $"：第 {Plugin.CurrentLoop}／{Plugin.EffectiveLoopTimes} 次循環" : "")}";
                                     else
                                         loopsText =
-                                            $"{(Plugin.CurrentTerritoryContent?.Name!.Length > 40 ? Plugin.CurrentTerritoryContent?.Name![..37] + "..." : Plugin.CurrentTerritoryContent?.Name)}{(Plugin.States.HasFlag(PluginState.Navigating) ? $"：第 {Plugin.CurrentLoop}／{Plugin.Configuration.LoopTimes} 次循環" : "")}";
+                                            $"{(Plugin.CurrentTerritoryContent?.Name!.Length > 40 ? Plugin.CurrentTerritoryContent?.Name![..37] + "..." : Plugin.CurrentTerritoryContent?.Name)}{(Plugin.States.HasFlag(PluginState.Navigating) ? $"：第 {Plugin.CurrentLoop}／{Plugin.EffectiveLoopTimes} 次循環" : "")}";
 
                                     ImGui.TextColored(new Vector4(93 / 255f, 226 / 255f, 231 / 255f, 1), loopsText);
                                 });

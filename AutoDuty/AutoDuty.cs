@@ -67,7 +67,7 @@ using TaskManager = ECommons.Automation.LegacyTaskManager.TaskManager;
 // WISHLIST for VBM:
 // Generic (Non Module) jousting respects navmesh out of bounds (or dynamically just adds forbiddenzones as Obstacles using Detour) (or at very least, vbm NavigationDecision can use ClosestPointonMesh in it's decision making) (or just spit balling here as no idea if even possible, add Everywhere non tiled as ForbiddenZones /shrug)
 
-public sealed class AutoDuty : IDalamudPlugin
+public sealed partial class AutoDuty : IDalamudPlugin
 {
     [PluginService] internal static IDalamudPluginInterface PluginInterface { get; private set; } = null!;
     internal List<PathAction> Actions { get; set; } = [];
@@ -98,6 +98,11 @@ public sealed class AutoDuty : IDalamudPlugin
     internal int                 PlaylistIndex   = 0;
     internal PlaylistEntry?      PlaylistCurrentEntry => this.PlaylistIndex >= 0 && this.PlaylistIndex < this.PlaylistCurrent.Count ? 
                                                              this.PlaylistCurrent[this.PlaylistIndex] : null;
+
+    internal bool PlannerRunning { get; private set; }
+    internal bool PlannerFinished { get; private set; }
+    public bool PlannerActive => PlannerRunning;
+    public int EffectiveLoopTimes => GetEffectiveLoopTimes();
 
     internal bool SupportLevelingEnabled => LevelingModeEnum == LevelingMode.Support;
     internal bool TrustLevelingEnabled => LevelingModeEnum.IsTrustLeveling();
@@ -678,6 +683,7 @@ public sealed class AutoDuty : IDalamudPlugin
     private void DutyState_DutyCompleted(object? sender, ushort e)
     {
         DutyState = DutyState.DutyComplete;
+        PlannerOnDutyCompleted();
         this.CheckFinishing();
     }
 
@@ -706,7 +712,11 @@ public sealed class AutoDuty : IDalamudPlugin
                 return;
             }
 
-            if (this.States.HasFlag(PluginState.Looping) && this.Configuration.AutoDutyModeEnum == AutoDutyMode.Playlist)
+            if (PlannerRunning && TrySelectPlannerPath(container, out var plannerPathIndex))
+            {
+                CurrentPath = plannerPathIndex;
+            }
+            else if (this.States.HasFlag(PluginState.Looping) && this.Configuration.AutoDutyModeEnum == AutoDutyMode.Playlist)
             {
                 string? s = this.PlaylistCurrentEntry?.path ?? null;
                 if(s != null) 
@@ -793,10 +803,10 @@ public sealed class AutoDuty : IDalamudPlugin
 
         if (t != CurrentTerritoryContent.TerritoryType)
         {
-            if (CurrentLoop < Configuration.LoopTimes || this.Configuration.AutoDutyModeEnum == AutoDutyMode.Playlist)
+            if (PlannerRunning ? !PlannerFinished : CurrentLoop < GetEffectiveLoopTimes() || this.Configuration.AutoDutyModeEnum == AutoDutyMode.Playlist)
             {
                 TaskManager.Abort();
-                TaskManager.Enqueue(() => Svc.Log.Debug($"Loop {CurrentLoop} of {Configuration.LoopTimes}"), "Loop-Debug");
+                TaskManager.Enqueue(() => Svc.Log.Debug($"Loop {CurrentLoop} of {GetEffectiveLoopTimes()}"), "Loop-Debug");
                 TaskManager.Enqueue(() => { Stage = Stage.Looping; }, "Loop-SetStage=99");
                 TaskManager.Enqueue(() => { States &= ~PluginState.Navigating; }, "Loop-RemoveNavigationState");
                 TaskManager.Enqueue(() => PlayerHelper.IsReady, int.MaxValue, "Loop-WaitPlayerReady");
@@ -894,7 +904,7 @@ public sealed class AutoDuty : IDalamudPlugin
         if (CurrentTerritoryContent == null)
             return;
 
-        if (loops > 0)
+        if (!PlannerRunning && loops > 0)
             Configuration.LoopTimes = loops;
 
         if (bareMode)
@@ -911,7 +921,7 @@ public sealed class AutoDuty : IDalamudPlugin
             Configuration.EnableTerminationActions = false;
         }
 
-        Svc.Log.Info($"Running AutoDuty in {CurrentTerritoryContent.EnglishName}, Looping {Configuration.LoopTimes} times{(bareMode ? " in BareMode (No Pre, Between or Termination Loop Actions)" : "")}");
+        Svc.Log.Info($"Running AutoDuty in {CurrentTerritoryContent.EnglishName}, Looping {GetEffectiveLoopTimes()} times{(bareMode ? " in BareMode (No Pre, Between or Termination Loop Actions)" : "")}");
 
         //MainWindow.OpenTab("Mini");
         if (Configuration.ShowOverlay)
@@ -925,7 +935,7 @@ public sealed class AutoDuty : IDalamudPlugin
         if (!VNavmesh_IPCSubscriber.Path_GetMovementAllowed())
             VNavmesh_IPCSubscriber.Path_SetMovementAllowed(true);
         TaskManager.Abort();
-        Svc.Log.Info($"Running {CurrentTerritoryContent.Name} {Configuration.LoopTimes} Times");
+        Svc.Log.Info($"Running {CurrentTerritoryContent.Name} {GetEffectiveLoopTimes()} Times");
         if (!InDungeon)
         {
             CurrentLoop = 0;
@@ -984,6 +994,13 @@ public sealed class AutoDuty : IDalamudPlugin
     internal unsafe void LoopTasks(bool queue = true)
     {
         if (CurrentTerritoryContent == null) return;
+
+        if (queue && PlannerRunning && !TryApplyPlannerSelection(out string plannerError))
+        {
+            MainWindow.ShowPopup("排程器", plannerError);
+            Stage = Stage.Stopped;
+            return;
+        }
 
         if (Configuration.EnableBetweenLoopActions)
         {
@@ -1152,7 +1169,7 @@ public sealed class AutoDuty : IDalamudPlugin
                                                                                            this.CurrentLoop ++;
                                                                                        }
                                                                                    }, "Loop-IncrementCurrentLoop");
-                                                               TaskManager.Enqueue(() => { Action = $"Looping: {CurrentTerritoryContent.Name} {CurrentLoop} of {Configuration.LoopTimes}"; }, "Loop-SetAction");
+                                                               TaskManager.Enqueue(() => { Action = $"Looping: {CurrentTerritoryContent.Name} {CurrentLoop} of {GetEffectiveLoopTimes()}"; }, "Loop-SetAction");
                                                                TaskManager.Enqueue(() => Svc.ClientState.TerritoryType == CurrentTerritoryContent.TerritoryType, int.MaxValue, "Loop-WaitCorrectTerritory");
                                                                TaskManager.Enqueue(() => PlayerHelper.IsValid,                 int.MaxValue, "Loop-WaitPlayerValid");
                                                                TaskManager.Enqueue(() => Svc.DutyState.IsDutyStarted,          int.MaxValue, "Loop-WaitDutyStarted");
@@ -1597,7 +1614,7 @@ public sealed class AutoDuty : IDalamudPlugin
     private void CheckFinishing()
     {
         //we finished lets exit the duty or stop
-        if ((Configuration.AutoExitDuty || CurrentLoop < Configuration.LoopTimes))
+        if (Configuration.AutoExitDuty || PlannerRunning || CurrentLoop < GetEffectiveLoopTimes())
         {
             if (!Stage.EqualsAny(Stage.Stopped, Stage.Paused)                                     &&
                 (!Configuration.OnlyExitWhenDutyDone || this.DutyState == DutyState.DutyComplete) &&
@@ -1945,6 +1962,8 @@ public sealed class AutoDuty : IDalamudPlugin
         if (VNavmesh_IPCSubscriber.IsEnabled && VNavmesh_IPCSubscriber.Path_GetTolerance() > 0.25F)
             VNavmesh_IPCSubscriber.Path_SetTolerance(0.25f);
         FollowHelper.SetFollow(null);
+        PlannerRunning = false;
+        PlannerFinished = false;
 
         if (VNavmesh_IPCSubscriber.IsEnabled && VNavmesh_IPCSubscriber.Path_IsRunning())
             VNavmesh_IPCSubscriber.Path_Stop();
